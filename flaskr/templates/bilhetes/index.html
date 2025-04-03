@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Bem vindo ao Sistema de Sorteio WEB{% endblock %}</h1>
+
+{% endblock %}
+
+{% block content %}
+    <article>
+        <a href="{{ url_for('bilhetes.depositar_bilhete') }}">Depositar novo bilhete</a>
+
+      </div>
+    </article>
+{% endblock %}

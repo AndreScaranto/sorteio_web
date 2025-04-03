@@ -3,7 +3,7 @@ from datetime import datetime
 
 import click
 from flask import current_app, g
-
+from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_db():
     if 'db' not in g:
@@ -27,6 +27,12 @@ def init_db():
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
+        """"""
+        db.execute(
+            "INSERT INTO administrador (username, password) VALUES (?, ?)",
+            ("admin", generate_password_hash("admin")),
+        )
+        db.commit()
 
 
 @click.command('init-db')

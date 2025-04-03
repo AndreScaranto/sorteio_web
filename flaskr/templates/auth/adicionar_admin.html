@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Adicionar Novo Administrador{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="usuario_novo">Nome de administrador adicionado</label>
+    <input name="usuario_novo" id="usuario_novo" required>
+    <label for="senha_nova">Senha de administrador adicionado</label>
+    <input type="password" name="senha_nova" id="senha_nova" required>
+    <label for="usuario">Confirme seu nome de administrador</label>
+    <input name="usuario" id="usuario" required>
+    <label for="senha">Confirme sua senha</label>
+    <input type="password" name="senha" id="senha" required>
+    <input type="submit" value="Alterar Dados">
+  </form>
+{% endblock %}

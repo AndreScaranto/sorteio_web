@@ -9,35 +9,6 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=('GET', 'POST'))
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-
-        if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-
-        if error is None:
-            try:
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"User {username} is already registered."
-            else:
-                return redirect(url_for("auth.login"))
-
-        flash(error)
-
-    return render_template('auth/register.html')
-
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -47,7 +18,7 @@ def login():
         db = get_db()
         error = None
         user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
+            'SELECT * FROM administrador WHERE username = ?', (username,)
         ).fetchone()
 
         if user is None:
@@ -73,7 +44,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+            'SELECT * FROM administrador WHERE id = ?', (user_id,)
         ).fetchone()
 
 
@@ -92,3 +63,40 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@bp.route('/updateadmin', methods=('GET', 'POST'))
+@login_required
+def updateadmin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        id = g.user['id']
+        db = get_db()
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+
+        if error is None:
+            try:
+                db.execute(
+                    "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                    (username, generate_password_hash(password)),
+                )
+                """db.execute(
+                    "DELETE FROM administrador WHERE id = (?)",
+                    (id),
+                )"""
+                db.commit()
+            except db.IntegrityError:
+                error = f"User {username} is already registered. {id}"
+            else:
+                return redirect(url_for("auth.login"))
+
+        flash(error)
+
+    return render_template('auth/alterar_admin.html')
+
