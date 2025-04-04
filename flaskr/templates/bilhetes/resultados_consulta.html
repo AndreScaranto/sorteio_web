@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Resultados Consulta{% endblock %}</h1>
+
+{% endblock %}
+
+{% block content %}
+  {% if bilhetes_encontrados %}
+    <article>
+      <div>
+        <h2>Bilhetes Encontrados</h2>
+        <table>
+          <tr>
+            <th>Codigo</th>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>Celular</th>
+          </tr>
+        {% for bilhete in bilhetes_encontrados %}
+          <tr>
+            <td>{{bilhete['codigo']}}</td>
+            <td>{{bilhete['nome']}}</td>
+            <td>{{bilhete['sobrenome']}}</td>
+            <td>{{bilhete['celular']}}</td>
+          </tr>
+
+        {% endfor %}
+        </table>
+      </div>
+    </article>
+  {% else %}
+      <p>Não foi encontrado nenhum bilhete com os valores pesquisados</p>
+      <a href="{{ url_for('bilhetes.consultar_bilhetes') }}">Nova pesquisa</a>
+  {% endif %}
+{% endblock %}

@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS bilhete;
 DROP TABLE IF EXISTS administrador;
 
 CREATE TABLE administrador (

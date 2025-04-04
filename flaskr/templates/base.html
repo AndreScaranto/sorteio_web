@@ -9,8 +9,9 @@
         <li><a href="{{ url_for('auth.updateadmin') }}">Alterar Dados</a>
         <li><a href="{{ url_for('auth.logout') }}">Sair</a>
     {% else %}
-      <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a>
+        <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a>
     {% endif %}
+        <li><a href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a>
   </ul>
 </nav>
 <section class="content">
