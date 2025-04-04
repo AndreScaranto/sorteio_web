@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Bem vindo à Área de Administrador do Sistema de Sorteio WEB{% endblock %}</h1>
+
+{% endblock %}
+
+{% block content %}
+    <article>
+      <div>
+        <a href="{{ url_for('admin.gerar_codigo') }}">Gerar novo código</a></br>
+      </div>
+    </article>
+{% endblock %}

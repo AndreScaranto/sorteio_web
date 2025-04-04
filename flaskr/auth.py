@@ -13,8 +13,8 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form['usuario']
+        password = request.form['senha']
         db = get_db()
         error = None
         user = db.execute(
@@ -29,7 +29,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('admin.index'))
 
         flash(error)
 
@@ -69,9 +69,10 @@ def login_required(view):
 @login_required
 def updateadmin():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        id = g.user['id']
+        username = request.form['usuario_novo']
+        password = request.form['senha_nova']
+        old_username = request.form['usuario']
+        old_password = request.form['senha']
         db = get_db()
         error = None
 
@@ -82,15 +83,25 @@ def updateadmin():
 
         if error is None:
             try:
-                db.execute(
-                    "INSERT INTO administrador (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
-                )
-                """db.execute(
-                    "DELETE FROM administrador WHERE id = (?)",
-                    (id),
-                )"""
-                db.commit()
+                test_password = db.execute(
+                    "SELECT * FROM administrador WHERE username = ?",
+                    (old_username, ),
+                ).fetchone()
+                if (check_password_hash(test_password['password'],old_password)):
+                    db.execute(
+                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                        (username, generate_password_hash(password)),
+                    )
+                    db.execute(
+                        "DELETE FROM administrador WHERE username = ?",
+                        (old_username,),
+                    )
+                    db.commit()
+                    user = db.execute(
+                        'SELECT * FROM administrador WHERE username = ?', (username,)
+                    ).fetchone()
+                    session.clear()
+                    session['user_id'] = user['id']
             except db.IntegrityError:
                 error = f"User {username} is already registered. {id}"
             else:
