@@ -42,13 +42,17 @@ def depositar_bilhete():
                 (codigo,)
             ).fetchone()
             if resultado:
-                db.execute(
-                    'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
-                    ' VALUES (?, ?, ?, ?, ?)',
-                    (codigo,nome,sobrenome,celular,resultado['id_sorteio'])
-                )
-                db.commit()
-                flash("Bilhete depositado com sucesso")
+                try:
+                    db.execute(
+                        'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
+                        ' VALUES (?, ?, ?, ?, ?)',
+                        (codigo,nome,sobrenome,celular,resultado['id_sorteio'])
+                    )
+                    db.commit()
+                    flash("Bilhete depositado com sucesso")
+                except db.IntegrityError:
+                    error = f"O código {codigo} já foi utilizado."
+                    flash(error)
             else:
                 flash("O código não é válido")
             return redirect(url_for('bilhetes.index'))

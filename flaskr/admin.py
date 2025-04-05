@@ -5,6 +5,8 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+import string
+import random
 
 bp = Blueprint('admin', __name__)
 
@@ -16,7 +18,13 @@ def index():
 def gerar_codigo():
     if request.method == 'POST':
         if request.form['sorteio_id']:
-            codigo = 1
+            possibilidades = string.ascii_uppercase + string.digits
+            codigo = ""
+            for i in range(7):
+                for j in range(5):
+                    codigo += random.choice(possibilidades)
+                if i < 6:
+                    codigo += "-"
             db = get_db()
             """db.execute(
                 'SELECT nome FROM sorteio INTO bilhete (codigo,nome,sobrenome,celular)'

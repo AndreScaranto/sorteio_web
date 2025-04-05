@@ -12,7 +12,7 @@ CREATE TABLE administrador (
 
 CREATE TABLE bilhete (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  codigo INTEGER NOT NULL,
+  codigo INTEGER UNIQUE NOT NULL,
   nome TEXT NOT NULL,
   sobrenome TEXT NOT NULL,
   celular TEXT NOT NULL,
