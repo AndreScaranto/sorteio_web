@@ -28,11 +28,6 @@ def gerar_codigo():
                 if i < 6:
                     codigo += "-"
             db = get_db()
-            """db.execute(
-                'SELECT nome FROM sorteio INTO bilhete (codigo,nome,sobrenome,celular)'
-                ' VALUES (?, ?, ?, ?)',
-                (codigo,nome,sobrenome,celular)
-            )"""
             db.execute('INSERT INTO codigo (codigo,id_sorteio) VALUES (?, ?)',
                        (codigo,request.form['sorteio_id']))
             db.commit()
@@ -103,7 +98,19 @@ def sortear_bilhete():
     return render_template('admin/sortear_bilhete.html',sorteio_escolhido=False,sorteios=sorteios)
 
 
-@bp.route('/consultar_vencedor')
+@bp.route('/consultar_vencedor', methods=('GET', 'POST'))
 @login_required
 def consultar_vencedor():
-    return render_template('admin/consultar_vencedor.html')
+    if request.method == 'POST':
+        if 'sorteio_id' in request.form:
+            db = get_db()
+            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id = ?',
+                       (request.form['sorteio_id'],)).fetchone()
+            vencedor = db.execute('SELECT * FROM bilhete WHERE id = ?',
+                       (sorteado['id_bilhete_sorteado'],)).fetchone()         
+            return render_template('admin/consultar_vencedor.html',sorteio_escolhido=True,vencedor = vencedor,sorteio=sorteado['nome'])
+    db = get_db()
+    sorteios = db.execute(
+        'SELECT * FROM sorteio WHERE realizado'
+    ).fetchall()
+    return render_template('admin/consultar_vencedor.html',sorteio_escolhido=False,sorteios=sorteios)

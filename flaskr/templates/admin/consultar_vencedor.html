@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Consultar Vencedor de Sorteio Já Realizado{% endblock %}</h1>
+
+{% endblock %}
+{% block content %}
+    {% if sorteio_escolhido %}
+        <article>
+            <div>
+                <h2>Bilhete Vencedor do Sorteio: <b>{{sorteio}}</b></h2>
+                <table>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nome</th>
+                        <th>Sobrenome</th>
+                        <th>Celular</th>
+                    </tr>
+                    <tr>
+                        <td>{{vencedor['codigo']}}</td>
+                        <td>{{vencedor['nome']}}</td>
+                        <td>{{vencedor['sobrenome']}}</td>
+                        <td>{{vencedor['celular']}}</td>
+                    </tr>
+                </table>
+            </div>
+        </article>
+    {% else %}
+        <article>
+            <div>
+                <form id="sorteio_form" method="post">
+                    <label for="sorteio_id">Nome do Sorteio</label>
+                    <select name="sorteio_id" form_id="sorteio_form" required>
+                        {% for sorteio in sorteios %}
+                            <option value="{{sorteio['id']}}">{{sorteio['nome']}}</option>
+                        {% endfor %}
+                    </select>
+                <input type="submit" value="Consultar Vencedor para este Sorteio">
+                </form>
+            </div>
+        </article>
+    {% endif %}
+{% endblock %}
