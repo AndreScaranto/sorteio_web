@@ -106,10 +106,11 @@ def alterar_admin():
                     ).fetchone()
                     session.clear()
                     session['user_id'] = user['id']
+                    flash("dados alterados com sucesso")
             except db.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {username}.{id}"
             else:
-                return redirect(url_for("auth.login"))
+                return redirect(url_for("admin.index"))
 
         flash(error)
 

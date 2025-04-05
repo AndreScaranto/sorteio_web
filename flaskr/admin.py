@@ -15,40 +15,51 @@ def index():
 @bp.route('/gerar_codigo', methods=('GET', 'POST'))
 def gerar_codigo():
     if request.method == 'POST':
-        codigo = request.form['codigo']
-        nome = request.form['nome']
-        sobrenome = request.form['sobrenome']
-        celular = request.form['celular']
-        error = None
-
-        if not codigo:
-            error = 'Faltou o código do bilhete.'
-
-        if not nome:
-            error = 'Faltou o nome do sorteado.'
-
-        if not sobrenome:
-            error = 'Faltou o sobrenome do sorteado.'
-
-        if not celular:
-            error = 'Faltou o celular do sorteado.'
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
+        if request.form['sorteio']:
+            """db = get_db()
             db.execute(
-                'INSERT INTO bilhete (codigo,nome,sobrenome,celular)'
+                'SELECT nome FROM sorteio INTO bilhete (codigo,nome,sobrenome,celular)'
                 ' VALUES (?, ?, ?, ?)',
                 (codigo,nome,sobrenome,celular)
             )
-            db.commit()
-            return redirect(url_for('bilhetes.index'))
+            db.commit()"""
+            return render_template('admin/gerar_codigo.html',sorteio_escolhido=True,sorteio=request.form['sorteio'])
+    db = get_db()
+    sorteios = db.execute(
+        'SELECT * FROM sorteio'
+    ).fetchall()
+    db.commit()
+    return render_template('admin/gerar_codigo.html',sorteio_escolhido=False,sorteios=sorteios)
 
-    return render_template('admin/gerar_codigo.html')
-
-@bp.route('/novo_sorteio')
+@bp.route('/novo_sorteio', methods=('GET', 'POST'))
 def novo_sorteio():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        data_limite = request.form['data_limite']
+        error = None
+
+        if not nome:
+            error = 'Faltou nome do sorteio.'
+
+        if not data_limite:
+            error = 'Faltou a data limite do sorteio.'
+
+        if error is not None:
+            flash(error)
+        try:
+            db = get_db()
+            db.execute(
+                'INSERT INTO sorteio (nome,data_limite)'
+                ' VALUES (?, ?)',
+                (nome,data_limite)
+            )
+            db.commit()
+            flash(f"{nome} criado com sucesso.")
+        except db.IntegrityError:
+            error = f"Já há um sorteio cadastrado com o nome {nome}."
+            flash(error)
+        finally:
+            return render_template('admin/novo_sorteio.html')
     return render_template('admin/novo_sorteio.html')
 
 @bp.route('/sortear_bilhete')
