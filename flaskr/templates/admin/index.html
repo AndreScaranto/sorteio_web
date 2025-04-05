@@ -8,11 +8,14 @@
 {% block content %}
     <article>
       <div>
+        <h2>Gerenciar Sorteios</h2>
         <a href="{{ url_for('admin.novo_sorteio') }}">Criar novo sorteio</a></br>
         <a href="{{ url_for('admin.gerar_codigo') }}">Gerar novo código de bilhete</a></br>
         <a href="{{ url_for('admin.sortear_bilhete') }}">Fazer o sorteio de um bilhete</a></br>
-        <a href="{{ url_for('auth.alterar_admin') }}">Alterar meus Dados</a></br>
-        <a href="{{ url_for('auth.adicionar_admin') }}">Adicionar novo Administrador</a></br>
+        <a href="{{ url_for('admin.consultar_vencedor') }}">Consultar vencedor de sorteio já realizado</a></br>
+        <h2>Gerenciar Acessos</h2>
+        <a href="{{ url_for('auth.alterar_admin') }}">Alterar meus dados</a></br>
+        <a href="{{ url_for('auth.adicionar_admin') }}">Adicionar novo administrador</a></br>
       </div>
     </article>
 {% endblock %}
