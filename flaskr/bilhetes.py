@@ -76,8 +76,8 @@ def consultar_bilhetes():
         else:
             db = get_db()
             bilhetes_encontrados = db.execute(
-                'SELECT codigo,nome,sobrenome,celular FROM bilhete WHERE codigo LIKE ? AND nome LIKE ? AND sobrenome LIKE ? AND celular LIKE ?',
-                ('%'+codigo+'%','%'+nome+'%','%'+sobrenome+'%','%'+celular+'%')
+                'SELECT codigo,nome,sobrenome,celular FROM bilhete WHERE codigo = ? AND nome LIKE ? AND sobrenome LIKE ? AND celular LIKE ?',
+                (codigo,'%'+nome+'%','%'+sobrenome+'%','%'+celular+'%')
             ).fetchall()
             db.commit()
             return render_template('bilhetes/resultados_consulta.html',bilhetes_encontrados=bilhetes_encontrados)
