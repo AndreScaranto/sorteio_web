@@ -11,10 +11,12 @@ import random
 bp = Blueprint('admin', __name__)
 
 @bp.route('/index')
+@login_required
 def index():
     return render_template('admin/index.html')
 
 @bp.route('/gerar_codigo', methods=('GET', 'POST'))
+@login_required
 def gerar_codigo():
     if request.method == 'POST':
         if request.form['sorteio_id']:
@@ -42,6 +44,7 @@ def gerar_codigo():
     return render_template('admin/gerar_codigo.html',sorteio_escolhido=False,sorteios=sorteios)
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
+@login_required
 def novo_sorteio():
     if request.method == 'POST':
         nome = request.form['nome']
@@ -73,5 +76,6 @@ def novo_sorteio():
     return render_template('admin/novo_sorteio.html')
 
 @bp.route('/sortear_bilhete')
+@login_required
 def sortear_bilhete():
     return render_template('admin/sortear_bilhete.html')
