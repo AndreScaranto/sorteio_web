@@ -37,12 +37,20 @@ def depositar_bilhete():
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                'INSERT INTO bilhete (codigo,nome,sobrenome,celular)'
-                ' VALUES (?, ?, ?, ?)',
-                (codigo,nome,sobrenome,celular)
-            )
-            db.commit()
+            resultado = db.execute(
+                'SELECT * FROM codigo WHERE codigo = ?',
+                (codigo,)
+            ).fetchone()
+            if resultado:
+                db.execute(
+                    'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
+                    ' VALUES (?, ?, ?, ?, ?)',
+                    (codigo,nome,sobrenome,celular,resultado['id_sorteio'])
+                )
+                db.commit()
+                flash("Bilhete depositado com sucesso")
+            else:
+                flash("O código não é válido")
             return redirect(url_for('bilhetes.index'))
 
     return render_template('bilhetes/depositar_bilhete.html')

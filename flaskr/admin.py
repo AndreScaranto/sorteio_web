@@ -15,20 +15,22 @@ def index():
 @bp.route('/gerar_codigo', methods=('GET', 'POST'))
 def gerar_codigo():
     if request.method == 'POST':
-        if request.form['sorteio']:
-            """db = get_db()
-            db.execute(
+        if request.form['sorteio_id']:
+            codigo = 1
+            db = get_db()
+            """db.execute(
                 'SELECT nome FROM sorteio INTO bilhete (codigo,nome,sobrenome,celular)'
                 ' VALUES (?, ?, ?, ?)',
                 (codigo,nome,sobrenome,celular)
-            )
-            db.commit()"""
-            return render_template('admin/gerar_codigo.html',sorteio_escolhido=True,sorteio=request.form['sorteio'])
+            )"""
+            db.execute('INSERT INTO codigo (codigo,id_sorteio) VALUES (?, ?)',
+                       (codigo,request.form['sorteio_id']))
+            db.commit()
+            return render_template('admin/gerar_codigo.html',sorteio_escolhido=True,codigo=codigo)
     db = get_db()
     sorteios = db.execute(
         'SELECT * FROM sorteio'
     ).fetchall()
-    db.commit()
     return render_template('admin/gerar_codigo.html',sorteio_escolhido=False,sorteios=sorteios)
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
