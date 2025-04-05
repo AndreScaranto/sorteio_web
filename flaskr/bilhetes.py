@@ -5,6 +5,8 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+from datetime import datetime
+from datetime import timedelta
 
 bp = Blueprint('bilhetes', __name__)
 
@@ -37,22 +39,30 @@ def depositar_bilhete():
             flash(error)
         else:
             db = get_db()
-            resultado = db.execute(
+            consulta_codigo = db.execute(
                 'SELECT * FROM codigo WHERE codigo = ?',
                 (codigo,)
             ).fetchone()
-            if resultado:
-                try:
-                    db.execute(
-                        'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
-                        ' VALUES (?, ?, ?, ?, ?)',
-                        (codigo,nome,sobrenome,celular,resultado['id_sorteio'])
-                    )
-                    db.commit()
-                    flash("Bilhete depositado com sucesso")
-                except db.IntegrityError:
-                    error = f"O código {codigo} já foi utilizado."
+            if consulta_codigo:
+                consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id = ?',
+                           (consulta_codigo['id_sorteio'],)).fetchone()
+                data_limite = consulta_sorteio['data_limite']
+                today = datetime.today()
+                if (today - data_limite) > timedelta(days = 1):
+                    error = f"O sorteio {consulta_sorteio['nome']} não aceita mais novos bilhetes."
                     flash(error)
+                else:
+                    try:
+                        db.execute(
+                            'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
+                            ' VALUES (?, ?, ?, ?, ?)',
+                            (codigo,nome,sobrenome,celular,consulta_codigo['id_sorteio'])
+                        )
+                        db.commit()
+                        flash("Bilhete depositado com sucesso")
+                    except db.IntegrityError:
+                        error = f"O código {codigo} já foi utilizado."
+                        flash(error)
             else:
                 flash("O código não é válido")
             return redirect(url_for('bilhetes.index'))
