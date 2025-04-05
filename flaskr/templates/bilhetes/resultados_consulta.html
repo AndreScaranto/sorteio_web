@@ -13,16 +13,24 @@
         <table>
           <tr>
             <th>Codigo</th>
-            <th>Nome</th>
-            <th>Sobrenome</th>
             <th>Celular</th>
+            <th>Sorteio</th>
+            <th>Resultado</th>
           </tr>
         {% for bilhete in bilhetes_encontrados %}
           <tr>
             <td>{{bilhete['codigo']}}</td>
-            <td>{{bilhete['nome']}}</td>
-            <td>{{bilhete['sobrenome']}}</td>
             <td>{{bilhete['celular']}}</td>
+            <td>{{bilhete['nome']}}</td>
+            {% if bilhete['realizado'] %}
+              {% if (bilhete['id'] == bilhete['id_sorteado']) %}
+                <td>Vencedor!</td>
+              {% else %}
+                <td>Não foi sorteado</td>
+              {% endif %}
+            {% else %}
+              <td>Sorteio em breve</td>
+            {% endif %}
           </tr>
 
         {% endfor %}

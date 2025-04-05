@@ -63,12 +63,10 @@ def depositar_bilhete():
 def consultar_bilhetes():
     if request.method == 'POST':
         codigo = request.form['codigo']
-        nome = request.form['nome']
-        sobrenome = request.form['sobrenome']
         celular = request.form['celular']
         error = None
 
-        if not codigo and not nome and not sobrenome and not celular:
+        if not codigo and not celular:
             error = 'Preencha pelo menos um campo.'
 
         if error is not None:
@@ -76,8 +74,10 @@ def consultar_bilhetes():
         else:
             db = get_db()
             bilhetes_encontrados = db.execute(
-                'SELECT codigo,nome,sobrenome,celular FROM bilhete WHERE codigo = ? AND nome LIKE ? AND sobrenome LIKE ? AND celular LIKE ?',
-                (codigo,'%'+nome+'%','%'+sobrenome+'%','%'+celular+'%')
+                'SELECT bilhete.id AS id, bilhete.codigo AS codigo, bilhete.celular AS celular, sorteio.nome AS nome, sorteio.realizado AS realizado, sorteio.id_bilhete_sorteado as id_sorteado' + 
+                ' FROM bilhete INNER JOIN sorteio ON bilhete.id_sorteio = sorteio.id' +
+                 ' WHERE ((? = "") OR bilhete.codigo = ?) AND bilhete.celular LIKE ?',
+                (codigo,codigo,'%'+celular+'%')
             ).fetchall()
             db.commit()
             return render_template('bilhetes/resultados_consulta.html',bilhetes_encontrados=bilhetes_encontrados)
