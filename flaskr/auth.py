@@ -65,9 +65,9 @@ def login_required(view):
     return wrapped_view
 
 
-@bp.route('/updateadmin', methods=('GET', 'POST'))
+@bp.route('/alterar_admin', methods=('GET', 'POST'))
 @login_required
-def updateadmin():
+def alterar_admin():
     if request.method == 'POST':
         username = request.form['usuario_novo']
         password = request.form['senha_nova']
@@ -76,10 +76,14 @@ def updateadmin():
         db = get_db()
         error = None
 
-        if not username:
-            error = 'Username is required.'
+        if not old_username:
+            error = 'Preencha o nome de usuário antigo.'
+        elif not old_password:
+            error = 'Preencha a senha antiga.'
+        elif not username:
+            error = 'Preencha o nome de usuário novo.'
         elif not password:
-            error = 'Password is required.'
+            error = 'Preencha a senha nova.'
 
         if error is None:
             try:
@@ -103,7 +107,7 @@ def updateadmin():
                     session.clear()
                     session['user_id'] = user['id']
             except db.IntegrityError:
-                error = f"User {username} is already registered. {id}"
+                error = f"Já há um administrador cadastrado com o nome {username}.{id}"
             else:
                 return redirect(url_for("auth.login"))
 
@@ -111,3 +115,43 @@ def updateadmin():
 
     return render_template('auth/alterar_admin.html')
 
+@bp.route('/adicionar_admin', methods=('GET', 'POST'))
+@login_required
+def adicionar_admin():
+    if request.method == 'POST':
+        new_username = request.form['usuario_novo']
+        new_password = request.form['senha_nova']
+        username = request.form['usuario']
+        password = request.form['senha']
+        db = get_db()
+        error = None
+
+        if not username:
+            error = 'Preencha seu nome de usuário.'
+        elif not password:
+            error = 'Preencha sua senha.'
+        elif not new_username:
+            error = 'Preencha o nome de usuário novo.'
+        elif not new_password:
+            error = 'Preencha a senha nova.'
+
+        if error is None:
+            try:
+                test_password = db.execute(
+                    "SELECT * FROM administrador WHERE username = ?",
+                    (username, ),
+                ).fetchone()
+                if (check_password_hash(test_password['password'],password)):
+                    db.execute(
+                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                        (new_username, generate_password_hash(new_password)),
+                    )
+                    db.commit()
+            except db.IntegrityError:
+                error = f"Já há um administrador cadastrado com o nome {username}.{id}"
+            else:
+                return render_template('auth/adicionar_admin.html',resultado=(True,username))
+
+        flash(error)
+
+    return render_template('auth/adicionar_admin.html')

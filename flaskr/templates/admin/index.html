@@ -8,7 +8,11 @@
 {% block content %}
     <article>
       <div>
-        <a href="{{ url_for('admin.gerar_codigo') }}">Gerar novo código</a></br>
+        <a href="{{ url_for('admin.novo_sorteio') }}">Criar novo sorteio</a></br>
+        <a href="{{ url_for('admin.gerar_codigo') }}">Gerar novo código de bilhete</a></br>
+        <a href="{{ url_for('admin.sortear_bilhete') }}">Fazer o sorteio de um bilhete</a></br>
+        <a href="{{ url_for('auth.alterar_admin') }}">Alterar meus Dados</a></br>
+        <a href="{{ url_for('auth.adicionar_admin') }}">Adicionar novo Administrador</a></br>
       </div>
     </article>
 {% endblock %}

@@ -6,9 +6,8 @@
   <ul>
     {% if g.user %}
         <li><span>{{ g.user['username'] }}</span>
-        <li><a href="{{ url_for('auth.updateadmin') }}">Alterar Dados</a>
         <li><a href="{{ url_for('auth.logout') }}">Sair</a>
-        
+        <li><a href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
     {% else %}
         <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a>
         <li><a href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a>
