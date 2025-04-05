@@ -22,9 +22,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = 'Incorrect username.'
+            error = 'Nome de usuário incorreto.'
         elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+            error = 'Senha incorreta.'
 
         if error is None:
             session.clear()
@@ -93,12 +93,12 @@ def alterar_admin():
                 ).fetchone()
                 if (check_password_hash(test_password['password'],old_password)):
                     db.execute(
-                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
-                        (username, generate_password_hash(password)),
-                    )
-                    db.execute(
                         "DELETE FROM administrador WHERE username = ?",
                         (old_username,),
+                    )
+                    db.execute(
+                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                        (username, generate_password_hash(password)),
                     )
                     db.commit()
                     user = db.execute(
@@ -106,9 +106,9 @@ def alterar_admin():
                     ).fetchone()
                     session.clear()
                     session['user_id'] = user['id']
-                    flash("dados alterados com sucesso")
+                    flash("Dados alterados com sucesso")
             except db.IntegrityError:
-                error = f"Já há um administrador cadastrado com o nome {username}.{id}"
+                error = f"Já há um administrador cadastrado com o nome {username}."
             else:
                 return redirect(url_for("admin.index"))
 
@@ -148,8 +148,9 @@ def adicionar_admin():
                         (new_username, generate_password_hash(new_password)),
                     )
                     db.commit()
+                    flash(f"Novo administrador cadastrado com o nome {username} com sucesso.")
             except db.IntegrityError:
-                error = f"Já há um administrador cadastrado com o nome {username}.{id}"
+                error = f"Já há um administrador cadastrado com o nome {username}."
             else:
                 return render_template('auth/adicionar_admin.html',resultado=(True,username))
 
