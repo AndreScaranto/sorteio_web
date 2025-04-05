@@ -19,7 +19,7 @@ def index():
 @login_required
 def gerar_codigo():
     if request.method == 'POST':
-        if request.form['sorteio_id']:
+        if 'sorteio_id' in request.form:
             possibilidades = string.ascii_uppercase + string.digits
             codigo = ""
             for i in range(7):
@@ -39,7 +39,7 @@ def gerar_codigo():
             return render_template('admin/gerar_codigo.html',sorteio_escolhido=True,codigo=codigo)
     db = get_db()
     sorteios = db.execute(
-        'SELECT * FROM sorteio'
+        'SELECT * FROM sorteio WHERE NOT realizado'
     ).fetchall()
     return render_template('admin/gerar_codigo.html',sorteio_escolhido=False,sorteios=sorteios)
 
@@ -75,7 +75,35 @@ def novo_sorteio():
             return render_template('admin/novo_sorteio.html')
     return render_template('admin/novo_sorteio.html')
 
-@bp.route('/sortear_bilhete')
+@bp.route('/sortear_bilhete', methods=('GET', 'POST'))
 @login_required
 def sortear_bilhete():
-    return render_template('admin/sortear_bilhete.html')
+    if request.method == 'POST':
+        if 'sorteio_id' in request.form:
+            db = get_db()
+            bilhetes = db.execute('SELECT * FROM bilhete WHERE id_sorteio = ?',
+                       (request.form['sorteio_id'],)).fetchall()
+            tamanho = len(bilhetes)
+            numero_sorteado = random.choice(range(tamanho))
+            sorteado = bilhetes[numero_sorteado]
+            return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=False,sorteado=sorteado)
+        elif 'id_bilhete' in request.form:
+            db = get_db()
+            sorteado = db.execute('SELECT * FROM bilhete WHERE id = ?',
+                       (request.form['id_bilhete'],)).fetchone()
+            db.execute('UPDATE sorteio SET realizado = 1, id_bilhete_sorteado = ? WHERE id = ?',
+                       (sorteado['id'],sorteado['id_sorteio'])
+            )
+            db.commit()
+            return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=True,sorteado=sorteado)
+    db = get_db()
+    sorteios = db.execute(
+        'SELECT * FROM sorteio WHERE NOT realizado'
+    ).fetchall()
+    return render_template('admin/sortear_bilhete.html',sorteio_escolhido=False,sorteios=sorteios)
+
+
+@bp.route('/consultar_vencedor')
+@login_required
+def consultar_vencedor():
+    return render_template('admin/consultar_vencedor.html')
