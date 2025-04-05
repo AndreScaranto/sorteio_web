@@ -47,28 +47,10 @@ def gerar_codigo():
 
     return render_template('admin/gerar_codigo.html')
 
-@bp.route('/consultar_bilhetes', methods=('GET','POST'))
-def consultar_bilhetes():
-    if request.method == 'POST':
-        codigo = request.form['codigo']
-        nome = request.form['nome']
-        sobrenome = request.form['sobrenome']
-        celular = request.form['celular']
-        error = None
+@bp.route('/novo_sorteio')
+def novo_sorteio():
+    return render_template('admin/novo_sorteio.html')
 
-        if not codigo and not nome and not sobrenome and not celular:
-            error = 'Preencha pelo menos um campo.'
-
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            bilhetes_encontrados = db.execute(
-                'SELECT codigo,nome,sobrenome,celular FROM bilhete WHERE codigo LIKE ? AND nome LIKE ? AND sobrenome LIKE ? AND celular LIKE ?',
-                ('%'+codigo+'%','%'+nome+'%','%'+sobrenome+'%','%'+celular+'%')
-            ).fetchall()
-            db.commit()
-            return render_template('bilhetes/resultados_consulta.html',bilhetes_encontrados=bilhetes_encontrados)
-
-    return render_template('bilhetes/consultar_bilhetes.html')
-
+@bp.route('/sortear_bilhete')
+def sortear_bilhete():
+    return render_template('admin/sortear_bilhete.html')
