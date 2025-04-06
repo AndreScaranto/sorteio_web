@@ -16,7 +16,6 @@ CREATE TABLE bilhete (
   nome TEXT NOT NULL,
   sobrenome TEXT NOT NULL,
   celular TEXT NOT NULL,
-  horario TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_sorteio INTEGER NOT NULL,
   FOREIGN KEY (id_sorteio) REFERENCES sorteio(id)
 );
@@ -24,7 +23,6 @@ CREATE TABLE bilhete (
 CREATE TABLE codigo (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   codigo INTEGER NOT NULL,
-  horario TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_sorteio INTEGER NOT NULL,
   FOREIGN KEY (id_sorteio) REFERENCES sorteio(id)
 );
