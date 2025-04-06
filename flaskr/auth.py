@@ -148,9 +148,9 @@ def adicionar_admin():
                         (new_username, generate_password_hash(new_password)),
                     )
                     db.commit()
-                    flash(f"Novo administrador cadastrado com o nome {username} com sucesso.")
+                    flash(f"Novo administrador cadastrado com o nome {new_username} com sucesso.")
             except db.IntegrityError:
-                error = f"Já há um administrador cadastrado com o nome {username}."
+                error = f"Já há um administrador cadastrado com o nome {new_username}."
             else:
                 return render_template('auth/adicionar_admin.html',resultado=(True,username))
 
