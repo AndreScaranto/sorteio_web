@@ -21,9 +21,9 @@
           <tr>
             <td>{{bilhete['codigo']}}</td>
             <td>{{bilhete['celular']}}</td>
-            <td>{{bilhete['nome']}}</td>
+            <td>{{bilhete['nome_sorteio']}}</td>
             {% if bilhete['realizado'] %}
-              {% if (bilhete['id'] == bilhete['id_sorteado']) %}
+              {% if (bilhete['id_bilhete'] == bilhete['id_sorteado']) %}
                 <td>Vencedor!</td>
               {% else %}
                 <td>Não foi sorteado</td>

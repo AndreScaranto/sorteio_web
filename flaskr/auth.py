@@ -28,7 +28,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_id'] = user['id_admin']
             return redirect(url_for('admin.index'))
 
         flash(error)
@@ -44,7 +44,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = get_db().execute(
-            'SELECT * FROM administrador WHERE id = ?', (user_id,)
+            'SELECT * FROM administrador WHERE id_admin = ?', (user_id,)
         ).fetchone()
 
 
@@ -105,7 +105,7 @@ def alterar_admin():
                         'SELECT * FROM administrador WHERE username = ?', (username,)
                     ).fetchone()
                     session.clear()
-                    session['user_id'] = user['id']
+                    session['user_id'] = user['id_admin']
                     flash("Dados alterados com sucesso")
             except db.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {username}."

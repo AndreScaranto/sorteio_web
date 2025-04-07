@@ -25,7 +25,7 @@
                     </tr>
             </div>
             <form method="post">
-                <input type="hidden" name="id_bilhete" value="{{sorteado['id']}}"></input>
+                <input type="hidden" name="id_bilhete" value="{{sorteado['id_bilhete']}}"></input>
                 <input type="submit" value="Validar Sorteio"></input>
             </form>
             
@@ -58,7 +58,7 @@
                     <label for="sorteio_id">Nome do Sorteio</label>
                     <select name="sorteio_id" form_id="sorteio_form" required>
                         {% for sorteio in sorteios %}
-                            <option value="{{sorteio['id']}}">{{sorteio['nome']}}</option>
+                            <option value="{{sorteio['id_sorteio']}}">{{sorteio['nome']}}</option>
                         {% endfor %}
                     </select>
                 <input type="submit" value="Sortear Bilhete Vencedor para este Sorteio">

@@ -44,7 +44,7 @@ def depositar_bilhete():
                 (codigo,)
             ).fetchone()
             if consulta_codigo:
-                consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id = ?',
+                consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = ?',
                            (consulta_codigo['id_sorteio'],)).fetchone()
                 data_limite = consulta_sorteio['data_limite']
                 today = datetime.today()
@@ -84,8 +84,9 @@ def consultar_bilhetes():
         else:
             db = get_db()
             bilhetes_encontrados = db.execute(
-                'SELECT bilhete.id AS id, bilhete.codigo AS codigo, bilhete.celular AS celular, sorteio.nome AS nome, sorteio.realizado AS realizado, sorteio.id_bilhete_sorteado as id_sorteado' + 
-                ' FROM bilhete INNER JOIN sorteio ON bilhete.id_sorteio = sorteio.id' +
+                'SELECT bilhete.id_bilhete AS id_bilhete, bilhete.codigo AS codigo, bilhete.celular AS celular,' +
+                 ' sorteio.nome AS nome_sorteio, sorteio.realizado AS realizado, sorteio.id_bilhete_sorteado as id_sorteado' + 
+                ' FROM bilhete INNER JOIN sorteio ON bilhete.id_sorteio = sorteio.id_sorteio' +
                  ' WHERE ((? = "") OR bilhete.codigo = ?) AND bilhete.celular LIKE ?',
                 (codigo,codigo,'%'+celular+'%')
             ).fetchall()

@@ -84,10 +84,10 @@ def sortear_bilhete():
             return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=False,sorteado=sorteado)
         elif 'id_bilhete' in request.form:
             db = get_db()
-            sorteado = db.execute('SELECT * FROM bilhete WHERE id = ?',
+            sorteado = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
                        (request.form['id_bilhete'],)).fetchone()
-            db.execute('UPDATE sorteio SET realizado = 1, id_bilhete_sorteado = ? WHERE id = ?',
-                       (sorteado['id'],sorteado['id_sorteio'])
+            db.execute('UPDATE sorteio SET realizado = 1, id_bilhete_sorteado = ? WHERE id_sorteio = ?',
+                       (sorteado['id_bilhete'],sorteado['id_sorteio'])
             )
             db.commit()
             return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=True,sorteado=sorteado)
@@ -104,9 +104,9 @@ def consultar_vencedor():
     if request.method == 'POST':
         if 'sorteio_id' in request.form:
             db = get_db()
-            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id = ?',
+            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id_sorteio = ?',
                        (request.form['sorteio_id'],)).fetchone()
-            vencedor = db.execute('SELECT * FROM bilhete WHERE id = ?',
+            vencedor = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
                        (sorteado['id_bilhete_sorteado'],)).fetchone()         
             return render_template('admin/consultar_vencedor.html',sorteio_escolhido=True,vencedor = vencedor,sorteio=sorteado['nome'])
     db = get_db()
