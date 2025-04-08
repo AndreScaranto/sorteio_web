@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Gerar Código para Novo Bilhete{% endblock %}</h1>
+
+{% endblock %}
+{% block content %}
+    {% if sorteio_escolhido %}
+    <script>
+        function copiarCodigo(codigo) {
+
+            navigator.clipboard.writeText(codigo);
+
+            alert("Código copiado para a área de transferência");
+        }
+      </script>
+        <article>
+            <div>
+                <p>Código gerado:</p>
+                <p>{{codigo}}</p>
+                <button onclick="copiarCodigo('{{codigo}}')">Copiar código</button>
+            </div>
+        </article>
+    {% else %}
+        <article>
+            <div>
+                <form id="sorteio_form" method="post">
+                    <label for="sorteio_id">Nome do Sorteio</label>
+                    <select name="sorteio_id" form_id="sorteio_form" required>
+                        {% for sorteio in sorteios %}
+                            <option value="{{sorteio['id']}}">{{sorteio['nome']}}</option>
+                        {% endfor %}
+                    </select>
+                <input type="submit" value="Gerar Código para este Sorteio">
+                </form>
+            </div>
+        </article>
+    {% endif %}
+{% endblock %}

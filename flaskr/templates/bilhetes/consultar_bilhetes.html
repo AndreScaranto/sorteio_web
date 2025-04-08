@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar Bilhetes{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Consultar meus bilhetes</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+    <input name="celular" placeholder="Digite seu celular" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <button type="submit" style="padding: 10px; background-color: #28A745; color: white; border: none; border-radius: 5px;">Buscar</button>
+  </form>
+
+  {% if bilhetes %}
+    <div style="margin-top: 30px;">
+      <h3>Resultado:</h3>
+      <ul style="padding-left: 20px;">
+        {% for bilhete in bilhetes %}
+          <li>
+            Código: {{ bilhete.codigo }} | Nome: {{ bilhete.nome }} {{ bilhete.sobrenome }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endblock %}

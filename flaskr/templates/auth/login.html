@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Log In - Acesso de Administrador</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+    <div>
+      <label for="usuario" style="font-weight: bold;">Nome de Usuário Administrador</label><br>
+      <input name="usuario" id="usuario" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+
+    <div>
+      <label for="senha" style="font-weight: bold;">Senha</label><br>
+      <input type="password" name="senha" id="senha" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+
+    <button type="submit" style="padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px;">
+      Entrar na Área de Administrador
+    </button>
+  </form>
+{% endblock %}

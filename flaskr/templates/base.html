@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-br">
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+  <h1>Sistema de Sorteios WEB</h1>
+  <ul>
+    {% if g.user %}
+        <li><span>{{ g.user['username'] }}</span>
+        <li><a href="{{ url_for('auth.logout') }}">Sair</a>
+        <li><a href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
+    {% else %}
+        <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a>
+        <li><a href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a>
+    {% endif %}
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
+</html>
