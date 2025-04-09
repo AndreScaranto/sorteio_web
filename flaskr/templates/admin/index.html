@@ -1,21 +1,23 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Bem vindo à Área de Administrador do Sistema de Sorteios WEB{% endblock %}</h1>
-
-{% endblock %}
+{% block title %}Área de Administrador{% endblock %}
 
 {% block content %}
-    <article>
-      <div>
-        <h2>Gerenciar Sorteios</h2>
-        <a href="{{ url_for('admin.novo_sorteio') }}">Criar novo sorteio</a></br>
-        <a href="{{ url_for('admin.gerar_codigo') }}">Gerar novo código de bilhete</a></br>
-        <a href="{{ url_for('admin.sortear_bilhete') }}">Fazer o sorteio do bilhete vencedor</a></br>
-        <a href="{{ url_for('admin.consultar_vencedor') }}">Consultar vencedor de sorteio já realizado</a></br>
-        <h2>Gerenciar Acessos</h2>
-        <a href="{{ url_for('auth.alterar_admin') }}">Alterar meus dados</a></br>
-        <a href="{{ url_for('auth.adicionar_admin') }}">Adicionar novo administrador</a></br>
-      </div>
-    </article>
+  <h2 style="margin-bottom: 20px;">Bem vindo à Área de Administrador do Sistema de Sorteios WEB</h2>
+
+  <article>
+    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+
+      <h3 style="margin-top: 10px;">🎲 Gerenciar Sorteios</h3>
+      <a href="{{ url_for('admin.novo_sorteio') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px;">Criar novo sorteio</a>
+      <a href="{{ url_for('admin.gerar_codigo') }}" style="text-decoration: none; background-color: #17A2B8; color: white; padding: 10px; border-radius: 5px;">Gerar novo código de bilhete</a>
+      <a href="{{ url_for('admin.sortear_bilhete') }}" style="text-decoration: none; background-color: #FFC107; color: black; padding: 10px; border-radius: 5px;">Fazer o sorteio do bilhete vencedor</a>
+      <a href="{{ url_for('admin.consultar_vencedor') }}" style="text-decoration: none; background-color: #6C757D; color: white; padding: 10px; border-radius: 5px;">Consultar vencedor de sorteio já realizado</a>
+
+      <h3 style="margin-top: 20px;">🔐 Gerenciar Acessos</h3>
+      <a href="{{ url_for('auth.alterar_admin') }}" style="text-decoration: none; background-color: #28A745; color: white; padding: 10px; border-radius: 5px;">Alterar meus dados</a>
+      <a href="{{ url_for('auth.adicionar_admin') }}" style="text-decoration: none; background-color: #DC3545; color: white; padding: 10px; border-radius: 5px;">Adicionar novo administrador</a>
+
+    </div>
+  </article>
 {% endblock %}
