@@ -7,6 +7,7 @@ from flaskr.auth import login_required
 from flaskr.db import get_db
 import string
 import random
+import secrets
 
 bp = Blueprint('admin', __name__)
 
@@ -79,7 +80,7 @@ def sortear_bilhete():
             bilhetes = db.execute('SELECT * FROM bilhete WHERE id_sorteio = ?',
                        (request.form['sorteio_id'],)).fetchall()
             tamanho = len(bilhetes)
-            numero_sorteado = random.choice(range(tamanho))
+            numero_sorteado = secrets.choice(range(tamanho))
             sorteado = bilhetes[numero_sorteado]
             return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=False,sorteado=sorteado)
         elif 'id_bilhete' in request.form:
