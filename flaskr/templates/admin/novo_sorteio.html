@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Criar Novo Sorteio{% endblock %}</h1>
-
-{% endblock %}
+{% block title %}Criar Novo Sorteio{% endblock %}
 
 {% block content %}
-    <article>
-        <div>
-        <form method="post">
-          <label for="nome">Nome do Sorteio</label>
-          <input name="nome" id="nome" required>
-          <label for="data_limite">Data Limite</label>
-          <input name="data_limite" id="data_limite" type="date" required>
-          <input type="submit" value="Criar Sorteio">
-        </form>
-      </div>
-    </article>
+  <h2 style="margin-bottom: 20px;">Criar Novo Sorteio</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+    <div>
+      <label for="nome" style="font-weight: bold;">Nome do Sorteio</label><br>
+      <input name="nome" id="nome" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+
+    <div>
+      <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
+      <input name="data_limite" id="data_limite" type="date" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+
+    <button type="submit" style="padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px;">
+      Criar Sorteio
+    </button>
+  </form>
 {% endblock %}

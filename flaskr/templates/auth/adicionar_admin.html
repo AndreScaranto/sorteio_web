@@ -1,19 +1,33 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Adicionar Novo Administrador{% endblock %}</h1>
-{% endblock %}
+{% block title %}Adicionar Novo Administrador{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="usuario_novo">Nome de administrador adicionado</label>
-    <input name="usuario_novo" id="usuario_novo" required>
-    <label for="senha_nova">Senha de administrador adicionado</label>
-    <input type="password" name="senha_nova" id="senha_nova" required>
-    <label for="usuario">Confirme seu nome de administrador</label>
-    <input name="usuario" id="usuario" required>
-    <label for="senha">Confirme sua senha</label>
-    <input type="password" name="senha" id="senha" required>
-    <input type="submit" value="Adicionar Novo Administrador">
+  <h2 style="margin-bottom: 20px;">Adicionar novo administrador</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 500px;">
+    <label for="usuario">Seu nome de usuário atual:</label>
+    <input name="usuario" id="usuario" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+
+    <label for="senha">Sua senha atual:</label>
+    <input name="senha" id="senha" type="password" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+
+    <hr>
+
+    <label for="usuario_novo">Nome de usuário do novo administrador:</label>
+    <input name="usuario_novo" id="usuario_novo" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+
+    <label for="senha_nova">Senha do novo administrador:</label>
+    <input name="senha_nova" id="senha_nova" type="password" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+
+    <button type="submit" style="padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px;">
+      Cadastrar novo administrador
+    </button>
   </form>
+
+  {% if resultado %}
+    <div style="margin-top: 20px; padding: 12px; background-color: #d4edda; border-left: 5px solid #28a745;">
+      Novo administrador adicionado com sucesso por <strong>{{ resultado[1] }}</strong>!
+    </div>
+  {% endif %}
 {% endblock %}

@@ -1,39 +1,26 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Gerar Código para Novo Bilhete{% endblock %}</h1>
+{% block title %}Gerar Novo Código{% endblock %}
 
-{% endblock %}
 {% block content %}
-    {% if sorteio_escolhido %}
-    <script>
-        function copiarCodigo(codigo) {
+  <h2 style="margin-bottom: 20px;">Gerar código de bilhete</h2>
 
-            navigator.clipboard.writeText(codigo);
-
-            alert("Código copiado para a área de transferência");
-        }
-      </script>
-        <article>
-            <div>
-                <p>Código gerado:</p>
-                <p>{{codigo}}</p>
-                <button onclick="copiarCodigo('{{codigo}}')">Copiar código</button>
-            </div>
-        </article>
-    {% else %}
-        <article>
-            <div>
-                <form id="sorteio_form" method="post">
-                    <label for="sorteio_id">Nome do Sorteio</label>
-                    <select name="sorteio_id" form_id="sorteio_form" required>
-                        {% for sorteio in sorteios %}
-                            <option value="{{sorteio['id_sorteio']}}">{{sorteio['nome']}}</option>
-                        {% endfor %}
-                    </select>
-                <input type="submit" value="Gerar Código para este Sorteio">
-                </form>
-            </div>
-        </article>
-    {% endif %}
+  {% if sorteio_escolhido %}
+    <div style="margin-bottom: 20px;">
+      <p><strong>Código gerado:</strong></p>
+      <div style="background-color: #f1f1f1; padding: 15px; border-radius: 5px; font-size: 20px; color: #333;">
+        {{ codigo }}
+      </div>
+    </div>
+  {% else %}
+    <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+      <label for="sorteio_id">Selecione um sorteio:</label>
+      <select name="sorteio_id" id="sorteio_id" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        {% for sorteio in sorteios %}
+          <option value="{{ sorteio.id_sorteio }}">{{ sorteio.nome }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Gerar Código</button>
+    </form>
+  {% endif %}
 {% endblock %}

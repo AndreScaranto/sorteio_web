@@ -1,69 +1,26 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Sorteio do Bilhete Vencedor!{% endblock %}</h1>
+{% block title %}Sortear Bilhete Vencedor{% endblock %}
 
-{% endblock %}
 {% block content %}
-    {% if sorteio_escolhido %}
-        {% if not validado %}
-        <article>
-            <div>
-                <h2>O Bilhete Sorteado foi:</h2>
-                <table>
-                    <tr>
-                      <th>Codigo</th>
-                      <th>Nome</th>
-                      <th>Sobrenome</th>
-                      <th>Celular</th>
-                    </tr>
-                    <tr>
-                      <td>{{sorteado['codigo']}}</td>
-                      <td>{{sorteado['nome']}}</td>
-                      <td>{{sorteado['sobrenome']}}</td>
-                      <td>{{sorteado['celular']}}</td>
-                    </tr>
-            </div>
-            <form method="post">
-                <input type="hidden" name="id_bilhete" value="{{sorteado['id_bilhete']}}"></input>
-                <input type="submit" value="Validar Sorteio"></input>
-            </form>
-            
-        </article>
-        {% else %}
-        <article>
-                <div>
-                    <h2>Validado o vencedor:</h2>
-                    <table>
-                        <tr>
-                        <th>Codigo</th>
-                        <th>Nome</th>
-                        <th>Sobrenome</th>
-                        <th>Celular</th>
-                        </tr>
-                        <tr>
-                        <td>{{sorteado['codigo']}}</td>
-                        <td>{{sorteado['nome']}}</td>
-                        <td>{{sorteado['sobrenome']}}</td>
-                        <td>{{sorteado['celular']}}</td>
-                        </tr>
-                </div>
-                <a href="{{ url_for('admin.index') }}">Voltar para a Área de Administrador</a>
-            </article>        
-        {% endif %}
-    {% else %}
-        <article>
-            <div>
-                <form id="sorteio_form" method="post">
-                    <label for="sorteio_id">Nome do Sorteio</label>
-                    <select name="sorteio_id" form_id="sorteio_form" required>
-                        {% for sorteio in sorteios %}
-                            <option value="{{sorteio['id_sorteio']}}">{{sorteio['nome']}}</option>
-                        {% endfor %}
-                    </select>
-                <input type="submit" value="Sortear Bilhete Vencedor para este Sorteio">
-                </form>
-            </div>
-        </article>
-    {% endif %}
+  <h2 style="margin-bottom: 20px;">Sortear o bilhete vencedor</h2>
+
+  {% if vencedor %}
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+      <p><strong>Bilhete Vencedor:</strong></p>
+      <p style="font-size: 18px; color: #007bff;">Código: {{ vencedor.codigo }}</p>
+      <p>Nome: {{ vencedor.nome }} {{ vencedor.sobrenome }}</p>
+      <p>Celular: {{ vencedor.celular }}</p>
+    </div>
+  {% else %}
+    <form method="post" style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+      <label for="sorteio_id">Selecione o sorteio:</label>
+      <select name="sorteio_id" id="sorteio_id" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        {% for sorteio in sorteios %}
+          <option value="{{ sorteio.id_sorteio }}">{{ sorteio.nome }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px;">Sortear Vencedor</button>
+    </form>
+  {% endif %}
 {% endblock %}
