@@ -102,16 +102,15 @@ def sortear_bilhete():
 @bp.route('/consultar_vencedor', methods=('GET', 'POST'))
 @login_required
 def consultar_vencedor():
-    if request.method == 'POST':
-        if 'sorteio_id' in request.form:
-            db = get_db()
-            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id_sorteio = ?',
-                       (request.form['sorteio_id'],)).fetchone()
-            vencedor = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
-                       (sorteado['id_bilhete_sorteado'],)).fetchone()         
-            return render_template('admin/consultar_vencedor.html',sorteio_escolhido=True,vencedor = vencedor,sorteio=sorteado['nome'])
     db = get_db()
     sorteios = db.execute(
         'SELECT * FROM sorteio WHERE realizado'
     ).fetchall()
+    if request.method == 'POST':
+        if 'sorteio_id' in request.form:
+            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id_sorteio = ?',
+                       (request.form['sorteio_id'],)).fetchone()
+            vencedor = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
+                       (sorteado['id_bilhete_sorteado'],)).fetchone()         
+            return render_template('admin/consultar_vencedor.html',sorteio_escolhido=True,vencedor = vencedor,sorteio=sorteado['nome'],sorteios=sorteios)
     return render_template('admin/consultar_vencedor.html',sorteio_escolhido=False,sorteios=sorteios)
