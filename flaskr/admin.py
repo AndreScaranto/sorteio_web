@@ -80,9 +80,12 @@ def sortear_bilhete():
             bilhetes = db.execute('SELECT * FROM bilhete WHERE id_sorteio = ?',
                        (request.form['sorteio_id'],)).fetchall()
             tamanho = len(bilhetes)
-            numero_sorteado = secrets.choice(range(tamanho))
-            sorteado = bilhetes[numero_sorteado]
-            return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=False,sorteado=sorteado)
+            if tamanho > 0:
+                numero_sorteado = secrets.choice(range(tamanho))
+                sorteado = bilhetes[numero_sorteado]
+                return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,bilhetes_vazio=False,validado=False,sorteado=sorteado)
+            else:
+                return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,bilhetes_vazio=True)
         elif 'id_bilhete' in request.form:
             db = get_db()
             sorteado = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',

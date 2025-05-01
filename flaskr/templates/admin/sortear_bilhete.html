@@ -4,36 +4,45 @@
 
 {% block content %}
   {% if sorteio_escolhido %}
-    {% if not validado %}
-    <article>
-      <h2>O Bilhete Sorteado foi:</h2>
-      <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <p><strong>Bilhete Vencedor:</strong></p>
-        <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
-        <p>Nome: {{ sorteado.nome }} {{ sorteado.sobrenome }}</p>
-        <p>Celular: {{ sorteado.celular }}</p>
-      </div>
-      <div>
-        <form method="post">
-            <input type="hidden" name="id_bilhete" value="{{sorteado['id_bilhete']}}"></input>
-            <input type="submit" value="Validar Sorteio" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px;"></input>
-        </form>
-      </div>        
-    </article>
-    {% else %}
+    {% if bilhetes_vazio %}
       <article>
-        <h2>Validado o vencedor:</h2>
+        <h4>O sorteado escolhido ainda não tem nenhum bilhete depositado</h4>
+        <div>
+          <a href="{{ url_for('admin.index') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Voltar para a Área de Administrador</a>
+        </div>
+      </article>     
+    {% else %}
+      {% if not validado %}
+      <article>
+        <h2>O Bilhete Sorteado foi:</h2>
         <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <p><strong>Bilhete Vencedor:</strong></p>
           <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
           <p>Nome: {{ sorteado.nome }} {{ sorteado.sobrenome }}</p>
           <p>Celular: {{ sorteado.celular }}</p>
         </div>
-
         <div>
-          <a href="{{ url_for('admin.index') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Voltar para a Área de Administrador</a>
-        </div>
-      </article>        
+          <form method="post">
+              <input type="hidden" name="id_bilhete" value="{{sorteado['id_bilhete']}}"></input>
+              <input type="submit" value="Validar Sorteio" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px;"></input>
+          </form>
+        </div>        
+      </article>
+      {% else %}
+        <article>
+          <h2>Validado o vencedor:</h2>
+          <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p><strong>Bilhete Vencedor:</strong></p>
+            <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
+            <p>Nome: {{ sorteado.nome }} {{ sorteado.sobrenome }}</p>
+            <p>Celular: {{ sorteado.celular }}</p>
+          </div>
+
+          <div>
+            <a href="{{ url_for('admin.index') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Voltar para a Área de Administrador</a>
+          </div>
+        </article>        
+      {% endif %}
     {% endif %}
   {% else %}
     <form method="post" style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
