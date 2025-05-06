@@ -39,13 +39,16 @@ def depositar_bilhete():
             flash(error)
         else:
             db = get_db()
-            consulta_codigo = db.execute(
-                'SELECT * FROM codigo WHERE codigo = ?',
+            cur = db.cursor(buffered = True)
+            cur.execute(
+                'SELECT * FROM codigo WHERE codigo = %s',
                 (codigo,)
-            ).fetchone()
-            if consulta_codigo:
-                consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = ?',
-                           (consulta_codigo['id_sorteio'],)).fetchone()
+            )
+            if cur.rowcount > 0:
+                consulta_codigo = dict(zip(cur.column_names, cur.fetchone()))
+                cur.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = %s',
+                           (consulta_codigo['id_sorteio'],))
+                consulta_sorteio = dict(zip(cur.column_names, cur.fetchone()))
                 data_limite = consulta_sorteio['data_limite']
                 today = datetime.today()
                 if (today - data_limite) > timedelta(days = 1):
@@ -53,9 +56,9 @@ def depositar_bilhete():
                     flash(error)
                 else:
                     try:
-                        db.execute(
+                        cur.execute(
                             'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
-                            ' VALUES (?, ?, ?, ?, ?)',
+                            ' VALUES (%s, %s, %s, %s, %s)',
                             (codigo,nome,sobrenome,celular,consulta_codigo['id_sorteio'])
                         )
                         db.commit()
@@ -83,13 +86,17 @@ def consultar_bilhetes():
             flash(error)
         else:
             db = get_db()
-            bilhetes_encontrados = db.execute(
+            cur = db.cursor()
+            cur.execute(
                 'SELECT bilhete.id_bilhete AS id_bilhete, bilhete.codigo AS codigo, bilhete.celular AS celular,' +
                  ' sorteio.nome AS nome_sorteio, sorteio.realizado AS realizado, sorteio.id_bilhete_sorteado as id_sorteado' + 
                 ' FROM bilhete INNER JOIN sorteio ON bilhete.id_sorteio = sorteio.id_sorteio' +
-                 ' WHERE ((? = "") OR bilhete.codigo = ?) AND bilhete.celular LIKE ?',
+                 ' WHERE ((%s = "") OR bilhete.codigo = %s) AND bilhete.celular LIKE %s',
                 (codigo,codigo,'%'+celular+'%')
-            ).fetchall()
+            )
+            bilhetes_encontrados = []
+            for resultado in cur.fetchall():
+                bilhetes_encontrados.append(dict(zip(cur.column_names, resultado)))
             db.commit()
             return render_template('bilhetes/resultados_consulta.html',bilhetes_encontrados=bilhetes_encontrados)
 
