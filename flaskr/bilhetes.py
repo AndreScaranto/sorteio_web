@@ -39,15 +39,16 @@ def depositar_bilhete():
             flash(error)
         else:
             db = get_db()
-            cur = db.cursor()
+            cur = db.cursor(buffered = True)
             cur.execute(
-                'SELECT * FROM codigo WHERE codigo = ?',
+                'SELECT * FROM codigo WHERE codigo = %s',
                 (codigo,)
             )
-            consulta_codigo = cur.fetchone()
-            if consulta_codigo:
-                consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = ?',
-                           (consulta_codigo['id_sorteio'],)).fetchone()
+            if cur.rowcount > 0:
+                consulta_codigo = dict(zip(cur.column_names, cur.fetchone()))
+                cur.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = %s',
+                           (consulta_codigo['id_sorteio'],))
+                consulta_sorteio = dict(zip(cur.column_names, cur.fetchone()))
                 data_limite = consulta_sorteio['data_limite']
                 today = datetime.today()
                 if (today - data_limite) > timedelta(days = 1):
@@ -55,9 +56,9 @@ def depositar_bilhete():
                     flash(error)
                 else:
                     try:
-                        db.execute(
+                        cur.execute(
                             'INSERT INTO bilhete (codigo,nome,sobrenome,celular,id_sorteio)'
-                            ' VALUES (?, ?, ?, ?, ?)',
+                            ' VALUES (%s, %s, %s, %s, %s)',
                             (codigo,nome,sobrenome,celular,consulta_codigo['id_sorteio'])
                         )
                         db.commit()
