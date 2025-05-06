@@ -15,6 +15,25 @@
       {% if not validado %}
       <article>
         <h2>O Bilhete Sorteado foi:</h2>
+        <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+        <script>
+          
+          function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+          }
+
+
+          function disparoConfetti() {
+            confetti({
+              angle: randomInRange(55, 125),
+              spread: randomInRange(50, 70),
+              particleCount: randomInRange(100, 200),
+              origin: { x: randomInRange(0.2,0.8), y: randomInRange(0.2,0.8) },
+            });
+          }
+          disparoConfetti();
+          setInterval(disparoConfetti,1000);
+        </script>
         <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <p><strong>Bilhete Vencedor:</strong></p>
           <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
