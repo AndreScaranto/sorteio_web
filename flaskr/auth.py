@@ -1,3 +1,5 @@
+import mysql.connector as mysql
+
 import functools
 
 from flask import (
@@ -78,6 +80,7 @@ def alterar_admin():
         old_password = request.form['senha']
         db = get_db()
         error = None
+        cur = db.cursor()
 
         if not old_username:
             error = 'Preencha o nome de usuário antigo.'
@@ -90,27 +93,29 @@ def alterar_admin():
 
         if error is None:
             try:
-                test_password = db.execute(
-                    "SELECT * FROM administrador WHERE username = ?",
+                cur.execute(
+                    "SELECT * FROM administrador WHERE username = %s",
                     (old_username, ),
-                ).fetchone()
+                )
+                test_password = dict(zip(cur.column_names, cur.fetchone()))
                 if (check_password_hash(test_password['password'],old_password)):
-                    db.execute(
-                        "DELETE FROM administrador WHERE username = ?",
+                    cur.execute(
+                        "DELETE FROM administrador WHERE username = %s",
                         (old_username,),
                     )
-                    db.execute(
-                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                    cur.execute(
+                        "INSERT INTO administrador (username, password) VALUES (%s, %s)",
                         (username, generate_password_hash(password)),
                     )
                     db.commit()
-                    user = db.execute(
-                        'SELECT * FROM administrador WHERE username = ?', (username,)
-                    ).fetchone()
+                    cur.execute(
+                        'SELECT * FROM administrador WHERE username = %s', (username,)
+                    )
+                    user = dict(zip(cur.column_names, cur.fetchone()))
                     session.clear()
                     session['user_id'] = user['id_admin']
                     flash("Dados alterados com sucesso")
-            except db.IntegrityError:
+            except mysql.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {username}."
             else:
                 return redirect(url_for("admin.index"))
@@ -152,7 +157,7 @@ def adicionar_admin():
                     )
                     db.commit()
                     flash(f"Novo administrador cadastrado com o nome {new_username} com sucesso.")
-            except db.IntegrityError:
+            except mysql.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {new_username}."
             else:
                 return render_template('auth/adicionar_admin.html',resultado=(True,username))
