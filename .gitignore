@@ -1,6 +1,6 @@
 # Ignora arquivos de cache do Python
-__pycache__/
-*.py[cod]
+#__pycache__/
+#*.py[cod]
 
 # Ignora arquivos temporários do sistema
 *.swp
@@ -16,7 +16,7 @@ Thumbs.db
 .idea/
 
 # Ignora arquivos de ambiente virtual
-env/
-venv/
-.venv/
-ambiente/
+#env/
+#venv/
+#.venv/
+#ambiente/
