@@ -82,25 +82,35 @@ def sortear_bilhete():
     if request.method == 'POST':
         if 'sorteio_id' in request.form:
             db = get_db()
-            bilhetes = db.execute('SELECT * FROM bilhete WHERE id_sorteio = ?',
-                       (request.form['sorteio_id'],)).fetchall()
+            cur = db.cursor()
+            cur.execute('SELECT * FROM bilhete WHERE id_sorteio = %s',
+                       (request.form['sorteio_id'],))
+            bilhetes = []
+            for resultado in cur.fetchall():
+                bilhetes.append(dict(zip(cur.column_names, resultado)))
             tamanho = len(bilhetes)
             numero_sorteado = random.choice(range(tamanho))
             sorteado = bilhetes[numero_sorteado]
             return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=False,sorteado=sorteado)
         elif 'id_bilhete' in request.form:
             db = get_db()
-            sorteado = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
-                       (request.form['id_bilhete'],)).fetchone()
-            db.execute('UPDATE sorteio SET realizado = 1, id_bilhete_sorteado = ? WHERE id_sorteio = ?',
+            cur = db.cursor()
+            cur.execute('SELECT * FROM bilhete WHERE id_bilhete = %s',
+                       (request.form['id_bilhete'],))
+            sorteado = dict(zip(cur.column_names, cur.fetchone()))
+            cur.execute('UPDATE sorteio SET realizado = 1, id_bilhete_sorteado = %s WHERE id_sorteio = %s',
                        (sorteado['id_bilhete'],sorteado['id_sorteio'])
             )
             db.commit()
             return render_template('admin/sortear_bilhete.html',sorteio_escolhido=True,validado=True,sorteado=sorteado)
     db = get_db()
-    sorteios = db.execute(
+    cur = db.cursor()
+    cur.execute(
         'SELECT * FROM sorteio WHERE NOT realizado'
-    ).fetchall()
+    )
+    sorteios = []
+    for resultado in cur.fetchall():
+        sorteios.append(dict(zip(cur.column_names, resultado)))
     return render_template('admin/sortear_bilhete.html',sorteio_escolhido=False,sorteios=sorteios)
 
 
