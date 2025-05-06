@@ -120,13 +120,20 @@ def consultar_vencedor():
     if request.method == 'POST':
         if 'sorteio_id' in request.form:
             db = get_db()
-            sorteado = db.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id_sorteio = ?',
-                       (request.form['sorteio_id'],)).fetchone()
-            vencedor = db.execute('SELECT * FROM bilhete WHERE id_bilhete = ?',
-                       (sorteado['id_bilhete_sorteado'],)).fetchone()         
+            cur = db.cursor()
+            cur.execute('SELECT id_bilhete_sorteado,nome FROM sorteio WHERE id_sorteio = %s',
+                       (request.form['sorteio_id'],))
+            sorteado = dict(zip(cur.column_names, cur.fetchone()))
+            cur.execute('SELECT * FROM bilhete WHERE id_bilhete = %s',
+                       (sorteado['id_bilhete_sorteado'],))
+            vencedor = dict(zip(cur.column_names, cur.fetchone()))        
             return render_template('admin/consultar_vencedor.html',sorteio_escolhido=True,vencedor = vencedor,sorteio=sorteado['nome'])
     db = get_db()
-    sorteios = db.execute(
+    cur = db.cursor()
+    cur.execute(
         'SELECT * FROM sorteio WHERE realizado'
-    ).fetchall()
+    )
+    sorteios = []
+    for resultado in cur.fetchall():
+        sorteios.append(dict(zip(cur.column_names, resultado)))
     return render_template('admin/consultar_vencedor.html',sorteio_escolhido=False,sorteios=sorteios)
