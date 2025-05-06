@@ -133,6 +133,7 @@ def adicionar_admin():
         username = request.form['usuario']
         password = request.form['senha']
         db = get_db()
+        cur = db.cursor()
         error = None
 
         if not username:
@@ -146,17 +147,19 @@ def adicionar_admin():
 
         if error is None:
             try:
-                test_password = db.execute(
-                    "SELECT * FROM administrador WHERE username = ?",
+                cur.execute(
+                    "SELECT * FROM administrador WHERE username = %s",
                     (username, ),
-                ).fetchone()
+                )
+                test_password = dict(zip(cur.column_names, cur.fetchone()))
                 if (check_password_hash(test_password['password'],password)):
-                    db.execute(
-                        "INSERT INTO administrador (username, password) VALUES (?, ?)",
+                    cur.execute(
+                        "INSERT INTO administrador (username, password) VALUES (%s, %s)",
                         (new_username, generate_password_hash(new_password)),
                     )
                     db.commit()
                     flash(f"Novo administrador cadastrado com o nome {new_username} com sucesso.")
+                 
             except mysql.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {new_username}."
             else:
