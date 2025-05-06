@@ -1,4 +1,4 @@
-import sqlite3
+import mysql.connector as mysql
 from datetime import datetime
 
 import click
@@ -7,11 +7,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
+        db = mysql.connect(
+            **current_app.config['DATABASE']
         )
-        g.db.row_factory = sqlite3.Row
+
+        g.db = db
+
 
     return g.db
 
@@ -24,15 +25,21 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
+    with db.cursor(buffered = True) as cur:
+        with current_app.open_resource('schema.sql') as f:
+            cur.execute(f.read().decode('utf8'))
+        #db.fetchall()
 
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
-        """"""
-        db.execute(
-            "INSERT INTO administrador (username, password) VALUES (?, ?)",
-            ("admin", generate_password_hash("admin")),
+    close_db()
+    db = get_db()
+    with db.cursor(buffered = True) as cur:
+        cur.execute(
+            "INSERT INTO administrador (username, password) VALUES (%s, %s)",
+            ("admin", generate_password_hash("admin"))
         )
         db.commit()
+        click.echo('Administrador default adicionado.')
+
 
 
 @click.command('init-db')
@@ -42,9 +49,7 @@ def init_db_command():
     click.echo('Initialized the database.')
 
 
-sqlite3.register_converter(
-    "timestamp", lambda v: datetime.fromisoformat(v.decode())
-)
+
 
 def init_app(app):
     app.teardown_appcontext(close_db)

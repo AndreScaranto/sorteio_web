@@ -39,10 +39,12 @@ def depositar_bilhete():
             flash(error)
         else:
             db = get_db()
-            consulta_codigo = db.execute(
+            cur = db.cursor()
+            cur.execute(
                 'SELECT * FROM codigo WHERE codigo = ?',
                 (codigo,)
-            ).fetchone()
+            )
+            consulta_codigo = cur.fetchone()
             if consulta_codigo:
                 consulta_sorteio = db.execute('SELECT data_limite,nome FROM sorteio WHERE id_sorteio = ?',
                            (consulta_codigo['id_sorteio'],)).fetchone()

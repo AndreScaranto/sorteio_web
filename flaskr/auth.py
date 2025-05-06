@@ -16,11 +16,12 @@ def login():
         username = request.form['usuario']
         password = request.form['senha']
         db = get_db()
+        cur = db.cursor(buffered = True)
+        cur.execute(
+            "SELECT * FROM administrador WHERE username = (%s)", (username,)
+        )
+        user = dict(zip(cur.column_names, cur.fetchone()))
         error = None
-        user = db.execute(
-            'SELECT * FROM administrador WHERE username = ?', (username,)
-        ).fetchone()
-
         if user is None:
             error = 'Nome de usuário incorreto.'
         elif not check_password_hash(user['password'], password):
@@ -43,9 +44,11 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM administrador WHERE id_admin = ?', (user_id,)
-        ).fetchone()
+        cur = get_db().cursor(buffered = True)
+        cur.execute(
+            'SELECT * FROM administrador WHERE id_admin = %s', (user_id,)
+        )
+        g.user = cur.fetchone()
 
 
 @bp.route('/logout')

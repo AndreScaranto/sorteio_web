@@ -28,14 +28,19 @@ def gerar_codigo():
                 if i < 6:
                     codigo += "-"
             db = get_db()
-            db.execute('INSERT INTO codigo (codigo,id_sorteio) VALUES (?, ?)',
+            cur = db.cursor()
+            cur.execute('INSERT INTO codigo (codigo,id_sorteio) VALUES (%s, %s)',
                        (codigo,request.form['sorteio_id']))
             db.commit()
             return render_template('admin/gerar_codigo.html',sorteio_escolhido=True,codigo=codigo)
     db = get_db()
-    sorteios = db.execute(
+    cur = db.cursor()
+    cur.execute(
         'SELECT * FROM sorteio WHERE NOT realizado'
-    ).fetchall()
+    )
+    sorteios = []
+    for resultado in cur.fetchall():
+        sorteios.append(dict(zip(cur.column_names, resultado)))
     return render_template('admin/gerar_codigo.html',sorteio_escolhido=False,sorteios=sorteios)
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
@@ -56,9 +61,10 @@ def novo_sorteio():
             flash(error)
         try:
             db = get_db()
-            db.execute(
+            cur = db.cursor()
+            cur.execute(
                 'INSERT INTO sorteio (nome,data_limite)'
-                ' VALUES (?, ?)',
+                ' VALUES (%s, %s)',
                 (nome,data_limite)
             )
             db.commit()
