@@ -1,4 +1,4 @@
-import mysql.connector as mysql
+import mysql.connector as mysql # type: ignore
 
 import functools
 
