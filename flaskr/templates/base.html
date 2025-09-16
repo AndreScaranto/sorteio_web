@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Sistema de Sorteios WEB{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav>
+      <h1>Sistema de Sorteios WEB</h1>
+      <ul>
+        {% if g.user %}
+            <li><span>{{ g.user['username'] }}</span></li>
+            <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+            <li><a href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a></li>
+            <li><a href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <header style="padding: 10px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="{{ url_for('static', filename='img/padocaffe imagem.jpeg') }}" alt="Logo Padocaffe" style="height: 50px;">
+        <h1 style="margin: 0;">Sistema de Sorteios WEB</h1>
+      </div>
+    </header>
+
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+
+    <section class="content">
+      {% block content %}{% endblock %}
+    </section>
+  </body>
+</html>

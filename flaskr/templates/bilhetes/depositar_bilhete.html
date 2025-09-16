@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Depositar Bilhete{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Deposite seu bilhete abaixo</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+    <input name="codigo" placeholder="Código" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <input name="nome" placeholder="Nome" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <input name="sobrenome" placeholder="Sobrenome" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <input name="celular" placeholder="Celular" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    <button type="submit" style="padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px;">Depositar</button>
+  </form>
+{% endblock %}

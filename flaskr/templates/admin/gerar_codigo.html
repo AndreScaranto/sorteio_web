@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerar Novo Código{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Gerar código de bilhete</h2>
+
+  {% if sorteio_escolhido %}
+    <div style="margin-bottom: 20px;">
+      <p><strong>Código gerado:</strong></p>
+      <div style="background-color: #f1f1f1; padding: 15px; border-radius: 5px; font-size: 20px; color: #333; word-break: break-word;">
+        <span id="codigo-texto">{{ codigo }}</span>
+      </div>
+      <button onclick="copiarCodigo()" style="margin-top: 10px; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+        Copiar Código
+      </button>
+    </div>
+
+    <script>
+      function copiarCodigo() {
+        const texto = document.getElementById('codigo-texto').innerText;
+        navigator.clipboard.writeText(texto).then(function() {
+          alert('Código copiado com sucesso!');
+        }, function(err) {
+          alert('Erro ao copiar código!');
+        });
+      }
+    </script>
+  
+  {% else %}
+    <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
+      <label for="sorteio_id">Selecione um sorteio:</label>
+      <select name="sorteio_id" id="sorteio_id" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        {% for sorteio in sorteios %}
+          <option value="{{ sorteio.id_sorteio }}">{{ sorteio.nome }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px;">
+        Gerar Código
+      </button>
+    </form>
+  {% endif %}
+{% endblock %}
