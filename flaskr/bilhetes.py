@@ -63,7 +63,7 @@ def depositar_bilhete():
                         )
                         db.commit()
                         flash("Bilhete depositado com sucesso")
-                    except db.IntegrityError:
+                    except:
                         error = f"O código {codigo} já foi utilizado."
                         flash(error)
             else:
