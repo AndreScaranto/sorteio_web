@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultar Bilhetes{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Consultar meus bilhetes</h2>
+
+  <form class="formulario" method="post">
+    <input class="inserir" name="celular" placeholder="Digite seu celular">
+    <input class="inserir"  name="codigo" placeholder="Digite o código do bilhete">
+    <button class="green-button" type="submit">Buscar</button>
+  </form>
+
+  {% if bilhetes %}
+    <div style="margin-top: 30px;">
+      <h3>Resultado:</h3>
+      <ul style="padding-left: 20px;">
+        {% for bilhete in bilhetes %}
+          <li>
+            Código: {{ bilhete.codigo }} | Nome: {{ bilhete.nome }} {{ bilhete.sobrenome }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endblock %}

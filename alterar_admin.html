@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Alterar Dados do Administrador{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Alterar Dados do Administrador</h2>
+
+  <form class="formulario" method="post" style="max-width: 500px;">
+    <label for="usuario">Nome de Usuário Atual:</label>
+    <input type="text" name="usuario" id="usuario" required>
+
+    <label for="senha">Senha Atual:</label>
+    <input type="password" name="senha" id="senha" required>
+
+    <hr>
+
+    <label for="usuario_novo">Novo Nome de Usuário:</label>
+    <input type="text" name="usuario_novo" id="usuario_novo" required>
+
+    <label for="senha_nova">Nova Senha:</label>
+    <input type="password" name="senha_nova" id="senha_nova" required>
+
+    <button class="green-button" type="submit">
+      Alterar Dados
+    </button>
+  </form>
+{% endblock %}
