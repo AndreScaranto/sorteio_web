@@ -6,16 +6,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <nav>
-      <h1>Sistema de Sorteios WEB</h1>
+    <nav class="navbar">
+      <h1>Bem vindo!</h1>
       <ul>
         {% if g.user %}
             <li><span>{{ g.user['username'] }}</span></li>
-            <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
-            <li><a href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
+            <li><a class="navbar-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
+            <li><a class="navbar-item" href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
         {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Área de Administrador</a></li>
-            <li><a href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a></li>
+            <li><a class="navbar-item" href="{{ url_for('auth.login') }}">Área de Administrador</a></li>
+            <li><a class="navbar-item" href="{{ url_for('bilhetes.index') }}">Voltar ao Início</a></li>
         {% endif %}
       </ul>
     </nav>
