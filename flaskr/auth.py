@@ -129,7 +129,7 @@ def alterar_admin():
                     session.clear()
                     session['user_id'] = user['id_admin']
                     flash("Dados alterados com sucesso")
-            except mysql.IntegrityError:
+            except db.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {username}."
             else:
                 return redirect(url_for("admin.index"))
@@ -174,7 +174,7 @@ def adicionar_admin():
                     db.commit()
                     flash(f"Novo administrador cadastrado com o nome {new_username} com sucesso.")
                  
-            except mysql.IntegrityError:
+            except db.IntegrityError:
                 error = f"Já há um administrador cadastrado com o nome {new_username}."
             else:
                 return render_template('auth/adicionar_admin.html',resultado=(True,username))
