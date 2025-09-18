@@ -17,9 +17,10 @@ def create_app(test_config=None):
 
     if test_config is not None:
         app.config.update(test_config)
-
-    # Inicializa o banco
+    
+    from . import db
     db.init_app(app)
+
 
     # Registra blueprints
     app.register_blueprint(auth.bp)
