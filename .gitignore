@@ -1,30 +1,5 @@
-<<<<<<< HEAD
 venv/ 
 __pycache__/ 
 instance/ 
 *.pyc 
 *.pyo 
-=======
-# Ignora arquivos de cache do Python
-#__pycache__/
-#*.py[cod]
-
-# Ignora arquivos temporários do sistema
-*.swp
-*.DS_Store
-Thumbs.db
-
-# Ignora banco SQLite (opcional – só se não quiser versionar o banco)
-*.sqlite
-*.db
-
-# Ignora pastas/arquivos pessoais do VSCode ou IDEs
-.vscode/
-.idea/
-
-# Ignora arquivos de ambiente virtual
-#env/
-#venv/
-#.venv/
-#ambiente/
->>>>>>> 32afeb09a2eb65cefe44a1447c4d6a94da14dcd1
