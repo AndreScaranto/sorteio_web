@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+venv/ 
+__pycache__/ 
+instance/ 
+*.pyc 
+*.pyo 
+=======
 # Ignora arquivos de cache do Python
 #__pycache__/
 #*.py[cod]
@@ -20,3 +27,4 @@ Thumbs.db
 #venv/
 #.venv/
 #ambiente/
+>>>>>>> 32afeb09a2eb65cefe44a1447c4d6a94da14dcd1

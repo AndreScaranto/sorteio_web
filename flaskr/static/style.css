@@ -1,7 +1,11 @@
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width: 960px; margin: 0 auto; background: white; }
 h1, h2 { font-family: serif; color: #377ba8; margin: 1rem 0; }
+<<<<<<< HEAD
+a { color: #5ba837; }
+=======
 nav a { color: #392594; font-weight:bold; font-family:serif}
+>>>>>>> 32afeb09a2eb65cefe44a1447c4d6a94da14dcd1
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
 nav h1 { flex: auto; margin: 0; }
