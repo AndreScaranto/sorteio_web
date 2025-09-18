@@ -8,7 +8,7 @@
 Thumbs.db
 
 # Ignora banco SQLite (opcional – só se não quiser versionar o banco)
-*.sqlite
+#*.sqlite
 *.db
 
 # Ignora pastas/arquivos pessoais do VSCode ou IDEs
