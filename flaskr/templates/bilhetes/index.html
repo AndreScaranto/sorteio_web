@@ -5,8 +5,8 @@
 {% block content %}
 <h1>Bem vindo ao Sistema de Sorteio WEB</h1>
 
-  <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
-    <a href="{{ url_for('bilhetes.depositar_bilhete') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Depositar novo bilhete</a>
-    <a href="{{ url_for('bilhetes.consultar_bilhetes') }}" style="text-decoration: none; background-color: #28A745; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Consultar meus bilhetes</a>
+  <div id="opcoes">
+    <a id="depositarbilhete" href="{{ url_for('bilhetes.depositar_bilhete') }}">Depositar novo bilhete</a>
+    <a id="consultarbilhete" href="{{ url_for('bilhetes.consultar_bilhetes') }}">Consultar meus bilhetes</a>
   </div> 
 {% endblock %}
