@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width: 960px; margin: 0 auto; background: white; }
 h1, h2 { font-family: serif; color: #377ba8; margin: 1rem 0; }
-<<<<<<< HEAD
-a { color: #5ba837; }
-=======
 nav a { color: #392594; font-weight:bold; font-family:serif}
->>>>>>> 32afeb09a2eb65cefe44a1447c4d6a94da14dcd1
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
 nav h1 { flex: auto; margin: 0; }
@@ -29,95 +24,3 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
-=======
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-color: #F5EFE6;
-    color: #4A2C2A;
-}
-
-/*Navbar*/
-
-.navbar {
-    width: 100%;
-    color: #2f2423;
-}
-
-.navbar li {
-    color: #634b49;
-}
-
-.navbar-item {
-    color: rgb(150, 150, 56);
-    text-decoration: none;
-    font-weight: bold;
-
-}
-
-/*.navbar li a:hover {}*/
-
-/* Depositar e consultar/index.html */
-
-#opcoes {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-}
-
-#depositarbilhete {
-    text-decoration: none;
-    background-color: #007BFF;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    width: fit-content;
-}
-
-#consultarbilhete {
-    text-decoration: none;
-    background-color: #28A745;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    width: fit-content;
-}
-
-.inserir {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.formulario {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
-}
-
-
-.green-button {
-    padding: 10px;
-    background-color: #28A745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-
-.blue-button {
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-
-/* Área de ADM */
-
-
->>>>>>> front-end
