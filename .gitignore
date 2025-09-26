@@ -1,6 +1,6 @@
 # Ignora arquivos de cache do Python
 #__pycache__/
-#*.py[cod]
+*.py[cod]
 
 # Ignora arquivos temporários do sistema
 *.swp
@@ -8,7 +8,7 @@
 Thumbs.db
 
 # Ignora banco SQLite (opcional – só se não quiser versionar o banco)
-*.sqlite
+#*.sqlite
 *.db
 
 # Ignora pastas/arquivos pessoais do VSCode ou IDEs
@@ -19,4 +19,4 @@ Thumbs.db
 #env/
 #venv/
 #.venv/
-#ambiente/
+ambiente/

@@ -1,18 +1,20 @@
-import mysql.connector as mysql # type: ignore
+
+
+
+import sqlite3, os
 from datetime import datetime
 
 import click
 from flask import current_app, g
 from werkzeug.security import check_password_hash, generate_password_hash
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+DB_PATH = os.path.join(PROJECT_ROOT, 'instance', 'flaskr.sqlite')
+
 def get_db():
     if 'db' not in g:
-        db = mysql.connect(
-            **current_app.config['DATABASE']
-        )
-
-        g.db = db
-
+        g.db = sqlite3.connect(DB_PATH)
+        g.db.row_factory = sqlite3.Row
 
     return g.db
 
@@ -25,21 +27,15 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
-    with db.cursor(buffered = True) as cur:
-        with current_app.open_resource('schema_mysql_workbench.sql') as f:
-            cur.execute(f.read().decode('utf8'))
-        #db.fetchall()
 
-    close_db()
-    db = get_db()
-    with db.cursor(buffered = True) as cur:
-        cur.execute(
-            "INSERT INTO administrador (username, password) VALUES (%s, %s)",
-            ("admin", generate_password_hash("admin"))
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+        """"""
+        db.execute(
+            "INSERT INTO administrador (username, password) VALUES (?, ?)",
+            ("admin", generate_password_hash("admin")),
         )
         db.commit()
-        click.echo('Administrador default adicionado.')
-
 
 
 @click.command('init-db')
@@ -49,7 +45,9 @@ def init_db_command():
     click.echo('Initialized the database.')
 
 
-
+sqlite3.register_converter(
+    "timestamp", lambda v: datetime.fromisoformat(v.decode())
+)
 
 def init_app(app):
     app.teardown_appcontext(close_db)
