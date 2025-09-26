@@ -5,18 +5,18 @@
 {% block content %}
   <h2 style="margin-bottom: 20px;">Criar Novo Sorteio</h2>
 
-  <form method="post" style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
+  <form class="formulario" method="post" style="gap: 12px;">
     <div>
       <label for="nome" style="font-weight: bold;">Nome do Sorteio</label><br>
-      <input name="nome" id="nome" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+      <input class="inserir" name="nome" id="nome" required>
     </div>
 
     <div>
       <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
-      <input name="data_limite" id="data_limite" type="date" required style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+      <input class="inserir" name="data_limite" id="data_limite" type="date" required>
     </div>
 
-    <button type="submit" style="padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px;">
+    <button class="blue-button" type="submit">
       Criar Sorteio
     </button>
   </form>
