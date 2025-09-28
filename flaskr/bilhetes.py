@@ -17,13 +17,13 @@ def depositar_bilhete():
     db = get_db()
 
     if request.method == 'POST':
-        codigo_raw = (request.form.get('codigo') or '').strip()
+        codigo = (request.form.get('codigo') or '').strip()
         nome       = (request.form.get('nome') or '').strip()
         sobrenome  = (request.form.get('sobrenome') or '').strip()
         celular    = (request.form.get('celular') or '').strip()
 
         # validações
-        if not codigo_raw:
+        if not codigo:
             flash('Faltou o código do bilhete.')
             return render_template('bilhetes/depositar_bilhete.html')
 
@@ -39,12 +39,7 @@ def depositar_bilhete():
             flash('Faltou o celular do sorteado.')
             return render_template('bilhetes/depositar_bilhete.html')
 
-        # codigo deve ser INTEGER (seu schema)
-        try:
-            codigo = int(codigo_raw)
-        except ValueError:
-            flash('O código precisa ser numérico.')
-            return render_template('bilhetes/depositar_bilhete.html')
+
 
         # 1) verifica se o código existe na tabela codigo
         cod_row = db.execute(
@@ -128,10 +123,10 @@ def depositar_bilhete():
 @bp.route('/consultar_bilhetes', methods=('GET','POST'))
 def consultar_bilhetes():
     if request.method == 'POST':
-        codigo_raw = (request.form.get('codigo') or '').strip()
+        codigo = (request.form.get('codigo') or '').strip()
         celular    = (request.form.get('celular') or '').strip()
 
-        if not codigo_raw and not celular:
+        if not codigo and not celular:
             flash('Preencha pelo menos um campo.')
             return render_template('bilhetes/consultar_bilhetes.html')
 
@@ -151,15 +146,6 @@ def consultar_bilhetes():
         )
         params = []
 
-        # filtro por codigo (INTEGER)
-        if codigo_raw:
-            try:
-                codigo = int(codigo_raw)
-                sql += ' AND bilhete.codigo = ?'
-                params.append(codigo)
-            except ValueError:
-                flash('O código precisa ser numérico.')
-                return render_template('bilhetes/consultar_bilhetes.html')
 
         # filtro por celular (LIKE)
         if celular:

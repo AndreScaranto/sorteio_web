@@ -6,7 +6,7 @@ from flaskr.auth import login_required
 from flaskr.db import get_db
 import secrets
 import sqlite3
-import random
+import random, string
 
 bp = Blueprint('admin', __name__)
 
@@ -22,41 +22,32 @@ def gerar_codigo():
     db = get_db()
 
     if request.method == 'POST':
-        sorteio_id = request.form.get('sorteio_id')
-        if not sorteio_id:
-            flash('Selecione um sorteio.')
-        else:
-            # A tabela "codigo" tem campo INTEGER.
-            # Vamos gerar um número grande aleatório.
-            codigo_int = random.randint(10_000_000, 99_999_999)
-
-            # Garante que o código não está duplicado no mesmo sorteio
-            existe = db.execute(
-                'SELECT 1 FROM codigo WHERE codigo = ? AND id_sorteio = ?',
-                (codigo_int, sorteio_id)
-            ).fetchone()
-
-            if existe:
-                flash('Gere novamente — código repetido por azar.')
-            else:
-                db.execute(
-                    'INSERT INTO codigo (codigo, id_sorteio) VALUES (?, ?)',
-                    (codigo_int, sorteio_id)
-                )
-                db.commit()
-                return render_template(
-                    'admin/gerar_codigo.html',
-                    sorteio_escolhido=True,
-                    codigo=codigo_int
-                )
+        if 'sorteio_id' in request.form:
+            possibilidades = string.ascii_uppercase + string.digits
+            codigo = ""
+            for i in range(7):
+                for j in range(5):
+                    codigo += random.choice(possibilidades)
+                if i < 6:
+                    codigo += "-"
+            db = get_db()
+            db.execute(
+                'INSERT INTO codigo (codigo, id_sorteio) VALUES (?, ?)',
+                (codigo, request.form['sorteio_id'])
+            )
+            db.commit()
+            return render_template(
+                'admin/gerar_codigo.html',
+                sorteio_escolhido=True,
+                codigo=codigo
+            )
 
     sorteios = db.execute(
-        'SELECT id_sorteio, nome FROM sorteio ORDER BY id_sorteio DESC'
+        'SELECT * FROM sorteio WHERE NOT realizado'
     ).fetchall()
     return render_template('admin/gerar_codigo.html',
                            sorteio_escolhido=False,
                            sorteios=sorteios)
-
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
 @login_required
