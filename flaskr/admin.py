@@ -10,6 +10,26 @@ import random, string
 
 bp = Blueprint('admin', __name__)
 
+def monta_api_whats(nome_ganhador,sobrenome_ganhador,nome_sorteio,celular_ganhador):
+    texto = f"Cara(o) {nome_ganhador} {sobrenome_ganhador}, você foi sorteada(o) no sorteio {nome_sorteio} da Padocaffe, parabéns! "
+    texto += "Por favor, entre em contato conosco para combinarmos a entrega do seu prêmio."
+    celular_base = (celular_ganhador).replace("-","")
+    celular_base = celular_base.replace("(","")
+    celular_base = celular_base.replace(")","")
+    celular_base = celular_base.replace(" ","")
+    if len(celular_base) >= 9:
+        if len(celular_base) >= 11:
+            if len(celular_base) >= 13:
+                celular = celular_base
+            else:
+                celular = "55" + celular_base
+        else:
+            celular = "5513" + celular_base
+    else:
+        celular = celular_base
+    api_whats = "https://api.whatsapp.com/send?phone=" + celular + "&text=" + texto
+    return api_whats
+
 @bp.route('/index')
 @login_required
 def index():
@@ -128,11 +148,19 @@ def sortear_bilhete():
             )
             db.commit()
 
+            sorteio = db.execute(
+                'SELECT * FROM sorteio WHERE id_sorteio = ?',
+                (sorteado['id_sorteio'],)
+            ).fetchone()
+
+            api_whats = monta_api_whats(sorteado['nome'],sorteado['sobrenome'],sorteio['nome'],sorteado['celular'])
+
             return render_template(
                 'admin/sortear_bilhete.html',
                 sorteio_escolhido=True,
                 validado=True,
-                sorteado=sorteado
+                sorteado=sorteado,
+                api_whats = api_whats
             )
 
     # GET: lista sorteios não realizados para escolher
@@ -159,12 +187,12 @@ def consultar_vencedor():
     if request.method == 'POST' and 'sorteio_id' in request.form:
         sorteio_id = request.form.get('sorteio_id')
 
-        sorteado = db.execute(
+        sorteio = db.execute(
             'SELECT id_bilhete_sorteado, nome FROM sorteio WHERE id_sorteio = ?',
             (sorteio_id,)
         ).fetchone()
 
-        if not sorteado or not sorteado['id_bilhete_sorteado']:
+        if not sorteio or not sorteio['id_bilhete_sorteado']:
             flash('Sorteio não possui bilhete sorteado.')
             return render_template(
                 'admin/consultar_vencedor.html',
@@ -174,15 +202,21 @@ def consultar_vencedor():
 
         vencedor = db.execute(
             'SELECT * FROM bilhete WHERE id_bilhete = ?',
-            (sorteado['id_bilhete_sorteado'],)
+            (sorteio['id_bilhete_sorteado'],)
         ).fetchone()
+
+ 
+
+
+        api_whats = monta_api_whats(vencedor['nome'],vencedor['sobrenome'],sorteio['nome'],vencedor['celular'])
 
         return render_template(
             'admin/consultar_vencedor.html',
             sorteio_escolhido=True,
             vencedor=vencedor,
-            sorteio=sorteado['nome'],
-            sorteios=sorteios
+            sorteio=sorteio['nome'],
+            sorteios=sorteios,
+            api_whats = api_whats
         )
 
     return render_template(
