@@ -77,10 +77,10 @@ def novo_sorteio():
         data_limite = (request.form.get('data_limite') or '').strip()
 
         if not nome:
-            flash('Faltou nome do sorteio.')
-        elif not data_limite:
-            flash('Faltou a data limite do sorteio.')
+            flash('Inserir o nome do sorteio.')
         else:
+            if not data_limite:
+                data_limite = "2999-01-01"
             db = get_db()
             try:
                 db.execute(

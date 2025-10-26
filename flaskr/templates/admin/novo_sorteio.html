@@ -10,12 +10,19 @@
       <label for="nome" style="font-weight: bold;">Nome do Sorteio</label><br>
       <input class="inserir" name="nome" id="nome" required>
     </div>
-
+    <div>
+      <label for="boolean_data_limite" style="font-weight: bold;">Usar Data Limite?</label><br>
+      <input name="boolean_data_limite" id="boolean_data_limite" type="checkbox" onclick ="alternarAtivaDataLimite()">
+    </div>
     <div>
       <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
-      <input class="inserir" name="data_limite" id="data_limite" type="date" required>
+      <input class="inserir" name="data_limite" id="data_limite" type="date" disabled>
     </div>
-
+    <script>
+      function alternarAtivaDataLimite() {
+        document.getElementById("data_limite").disabled = !document.getElementById("data_limite").disabled;
+      }
+    </script>
     <button class="blue-button" type="submit">
       Criar Sorteio
     </button>
