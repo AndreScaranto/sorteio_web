@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Alterar Sorteio{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Alterar Sorteio</h2>
+
+  <form class="formulario" method="post" style="gap: 12px;">
+    <input name="sorteio_id" type="hidden" value="{{sorteio.id_sorteio}}">
+    <div>
+      <label for="nome" style="font-weight: bold;">Nome do Sorteio</label><br>
+      <input class="inserir" name="nome" id="nome" value="{{sorteio.nome}}" required>
+    </div>
+    <div>
+      <label for="boolean_data_limite" style="font-weight: bold;">Usar Data Limite?</label><br>
+      <input name="boolean_data_limite" id="boolean_data_limite" type="checkbox" onclick ="alternarAtivaDataLimite()">
+    </div>
+    <div>
+      <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
+      <input class="inserir" name="data_limite" id="data_limite" type="date" value="{{sorteio.data_limite}}" disabled>
+    </div>
+    <script>
+      function alternarAtivaDataLimite() {
+        document.getElementById("data_limite").disabled = !document.getElementById("data_limite").disabled;
+      }
+    </script>
+    <button class="blue-button" type="submit">
+      Alterar Sorteio
+    </button>
+  </form>
+{% endblock %}

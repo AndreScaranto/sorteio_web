@@ -89,11 +89,92 @@ def novo_sorteio():
                 )
                 db.commit()
                 flash(f'{nome} criado com sucesso.')
+                return redirect('gerenciar_sorteios')
             except sqlite3.IntegrityError:
                 flash(f'Já há um sorteio cadastrado com o nome {nome}.')
             return render_template('admin/novo_sorteio.html')
 
     return render_template('admin/novo_sorteio.html')
+
+@bp.route('/gerenciar_sorteios', methods=('GET', 'POST'))
+@login_required
+def gerenciar_sorteios():
+    db = get_db()
+
+    # GET: lista sorteios não realizados para escolher
+    sorteios = db.execute(
+        'SELECT * FROM sorteio WHERE NOT realizado'
+    ).fetchall()
+
+    if request.method == 'POST':
+        # Caso 1: escolheu o sorteio para gerenciar
+        if 'sorteio_id' in request.form:
+            sorteio_id = request.form.get('sorteio_id')
+
+            dados_escolhido = db.execute(
+                'SELECT * FROM sorteio WHERE id_sorteio = ?',
+                (sorteio_id,)
+            ).fetchone()
+
+            bilhetes = db.execute(
+                'SELECT * FROM bilhete WHERE id_sorteio = ?',
+                (sorteio_id,)
+            ).fetchall()
+
+            total_bilhetes = len(bilhetes)
+
+            return render_template(
+                'admin/gerenciar_sorteios.html',
+                sorteio_escolhido=True,
+                escolhido=dados_escolhido,
+                total_bilhetes=total_bilhetes,
+                sorteios=sorteios
+            )
+
+
+
+    return render_template(
+        'admin/gerenciar_sorteios.html',
+        sorteio_escolhido=False,
+        sorteios=sorteios
+    )
+
+@bp.route('/alterar_sorteio', methods=['POST'])
+@login_required
+def alterar_sorteio():
+    if request.method == 'POST':
+        if not ('sorteio_id' in request.form):
+            return render_template('admin/gerenciar_sorteios.html')
+        sorteio_id = request.form.get('sorteio_id')
+        if not ('nome' in request.form):
+            db = get_db()
+            sorteio = db.execute(
+                'SELECT * FROM sorteio WHERE id_sorteio = ?',
+                (sorteio_id,)
+            ).fetchone()
+            return render_template('admin/alterar_sorteio.html',sorteio=sorteio)
+        else:
+            nome = (request.form.get('nome') or '').strip()
+            data_limite = (request.form.get('data_limite') or '').strip()
+
+            if not nome:
+                flash('Inserir o nome do sorteio.')
+            else:
+                if not data_limite:
+                    data_limite = "2999-01-01"
+                db = get_db()
+                try:
+                    db.execute(
+                        'UPDATE sorteio SET nome = ?, data_limite = ? WHERE id_sorteio = ?',
+                        (nome, data_limite,sorteio_id)
+                    )
+                    db.commit()
+                    flash(f'{nome} atualizado com sucesso.')
+                    return redirect('gerenciar_sorteios')
+                except sqlite3.IntegrityError:
+                    flash(f'Já há um sorteio cadastrado com o nome {nome}.')
+                return render_template('admin/alterar_sorteio.html')
+
 
 
 @bp.route('/sortear_bilhete', methods=('GET', 'POST'))

@@ -132,6 +132,8 @@ a {
     border-radius: 5px;
 }
 
+
+
 /* Área de ADM */
 
 /* MAIN */
@@ -216,3 +218,22 @@ input.danger {
 input[type=submit] { 
     align-self: start; min-width: 10em; 
 }
+
+.opcao_lista {
+    padding: 8px;
+    background-color:rgba(255, 255, 255, 1);
+    font-size:16px;
+    border: 1px;
+    border-color: black;
+    margin: 1px;
+}
+.opcao_lista:hover{
+    color: rgb(133, 133, 133)
+}
+
+.content form.form_lista {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+

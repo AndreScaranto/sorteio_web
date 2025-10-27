@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Sorteios Abertos{% endblock %}
+
+{% block content %}
+    <h2 style="margin-bottom: 20px;">Gerenciar Sorteios Abertos</h2>
+
+    <div>
+
+    {% for sorteio in sorteios %}
+        <form class="form_lista" method="post">
+            <input name="sorteio_id" type="hidden" value={{sorteio.id_sorteio}}>
+            <button class="opcao_lista" type="submit">{{sorteio.nome}}</button>
+        </form>
+    {% endfor %}
+    </div>
+    {% if sorteio_escolhido %}
+    <div style="border:1px;">
+        <p>Nome do sorteio: {{escolhido.nome}}</p>
+        <p>Quantidade de bilhetes depositados: {{total_bilhetes}}</p>
+        <p>Data limite para depósito de bilhetes: {{escolhido.data_limite}}</p>
+    </div>
+    <div>
+    <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;" action="{{ url_for('admin.alterar_sorteio') }}">
+        <input name="sorteio_id" type="hidden" value="{{escolhido.id_sorteio}}">
+        <button class="blue-button" type="submit">
+            Alterar Sorteio
+        </button>
+    </form>        
+    </div>
+    {% endif %}
+{% endblock %}
