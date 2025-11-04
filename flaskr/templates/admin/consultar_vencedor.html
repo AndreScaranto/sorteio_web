@@ -12,7 +12,7 @@
       <p>Nome: {{ vencedor.nome }} {{ vencedor.sobrenome }}</p>
       <p>Celular: {{ vencedor.celular }}</p>
       </br>
-      <h2><a href="{{ api_whats }}"  target ="_blank"><img src="{{ url_for('static', filename='img/Logo-bw-vertical1.svg') }}" class="logo-whats"> Comunicar ganhador via WhatsApp</a></h2>
+      <h2 class="comunicar_ganhador"><a href="{{ api_whats }}"  target ="_blank"><img src="{{ url_for('static', filename='img/Logo-bw-vertical1.svg') }}" class="logo-whats">Comunicar ganhador via WhatsApp</a></h2>
     </div>
   {% endif %}
   {% if sorteios %}

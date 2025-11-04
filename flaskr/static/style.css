@@ -240,3 +240,20 @@ input[type=submit] {
 .logo-whats {
     height: 27px;
 }
+
+.comunicar_ganhador{
+    display: inline-flex;
+    padding: 10px;
+    background-color: #462323;
+    border: #462323 1px solid;
+    border-radius: 20px;
+}
+
+.comunicar_ganhador > a {
+    display: inline-flex;
+    color: #FFF0D1;
+    justify-content: space-between;
+}
+
+
+
