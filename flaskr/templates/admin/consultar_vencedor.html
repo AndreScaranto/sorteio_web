@@ -7,7 +7,7 @@
 
   {% if vencedor %}
     <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-      <p><strong>Bilhete Vencedor:</strong></p>
+      <p><strong>Bilhete Vencedor do Sorteio {{ nome_sorteio }}:</strong></p>
       <p style="font-size: 18px; color: #17a2b8;">Código: {{ vencedor.codigo }}</p>
       <p>Nome: {{ vencedor.nome }} {{ vencedor.sobrenome }}</p>
       <p>Celular: {{ vencedor.celular }}</p>
@@ -17,7 +17,7 @@
   {% endif %}
   {% if sorteios %}
   <form class="formulario" method="post" style="gap: 12px;">
-    <label for="sorteio_id">Selecione o sorteio:</label>
+    <label for="sorteio_id">Selecione o sorteio para consultar:</label>
     <select name="sorteio_id" id="sorteio_id" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
       {% for sorteio in sorteios %}
         <option value="{{ sorteio.id_sorteio }}">{{ sorteio.nome }}</option>

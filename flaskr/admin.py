@@ -295,7 +295,7 @@ def consultar_vencedor():
             'admin/consultar_vencedor.html',
             sorteio_escolhido=True,
             vencedor=vencedor,
-            sorteio=sorteio['nome'],
+            nome_sorteio=sorteio['nome'],
             sorteios=sorteios,
             api_whats = api_whats
         )
