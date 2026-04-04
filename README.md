@@ -1,5 +1,5 @@
 # sorteio_web
-Sistema Web para Gerenciar e Operacionalizar um Sorteio.
+Sistema Web para Gerenciar e Operacionalizar um Sorteio, além de coletar dados e realizar análises de comportamento de consumidor.
 
 
 ## Como rodar
