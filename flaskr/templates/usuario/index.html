@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+ {% block title %}Bem vindo ao Sistema de Sorteio WEB{% endblock %}
+
+{% block content %}
+<h1>Bem vindo ao Sistema de Sorteio WEB</h1>
+
+  <div id="opcoes">
+    <a id="cadastrar" href="{{ url_for('usuario.depositar_bilhete') }}">Depositar novo bilhete</a>
+    <a id="fazerlogin" href="{{ url_for('usuario.consultar_bilhetes') }}">Consultar meus bilhetes</a>
+  </div> 
+{% endblock %}

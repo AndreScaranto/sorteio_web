@@ -5,11 +5,11 @@ from flaskr.db import get_db
 from datetime import datetime, timedelta
 import sqlite3
 
-bp = Blueprint('bilhetes', __name__)
+bp = Blueprint('usuario', __name__)
 
 @bp.route('/')
 def index():
-    return render_template('bilhetes/index.html')
+    return render_template('usuario/index.html')
 
 
 @bp.route('/depositar_bilhete', methods=('GET', 'POST'))
@@ -25,19 +25,19 @@ def depositar_bilhete():
         # validações
         if not codigo:
             flash('Faltou o código do bilhete.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         if not nome:
             flash('Faltou o nome do sorteado.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         if not sobrenome:
             flash('Faltou o sobrenome do sorteado.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         if not celular:
             flash('Faltou o celular do sorteado.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
 
 
@@ -49,7 +49,7 @@ def depositar_bilhete():
 
         if not cod_row:
             flash('O código não é válido.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         id_sorteio = cod_row['id_sorteio']
 
@@ -61,11 +61,11 @@ def depositar_bilhete():
 
         if not sort_row:
             flash('Sorteio não encontrado para esse código.')
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         if sort_row['realizado']:
             flash(f"O sorteio {sort_row['nome']} já foi realizado.")
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         # data_limite pode estar como 'YYYY-MM-DD' ou 'YYYY-MM-DD HH:MM:SS'
         raw = sort_row['data_limite']
@@ -90,7 +90,7 @@ def depositar_bilhete():
             hoje = datetime.now()
             if (hoje - data_limite) > timedelta(days=1):
                 flash(f"O sorteio {sort_row['nome']} não aceita mais novos bilhetes.")
-                return render_template('bilhetes/depositar_bilhete.html')
+                return render_template('usuario/depositar_bilhete.html')
 
         # 3) impede duplicidade do mesmo código neste sorteio
         dup = db.execute(
@@ -99,7 +99,7 @@ def depositar_bilhete():
         ).fetchone()
         if dup:
             flash(f"O código {codigo} já foi utilizado neste sorteio.")
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         # 4) insere o bilhete
         try:
@@ -111,13 +111,13 @@ def depositar_bilhete():
             db.commit()
         except sqlite3.IntegrityError:
             flash(f"O código {codigo} já foi utilizado.")
-            return render_template('bilhetes/depositar_bilhete.html')
+            return render_template('usuario/depositar_bilhete.html')
 
         flash("Bilhete depositado com sucesso")
-        return redirect(url_for('bilhetes.index'))
+        return redirect(url_for('usuario.index'))
 
     # GET
-    return render_template('bilhetes/depositar_bilhete.html')
+    return render_template('usuario/depositar_bilhete.html')
 
 
 @bp.route('/consultar_bilhetes', methods=('GET','POST'))
@@ -128,7 +128,7 @@ def consultar_bilhetes():
 
         if not codigo and not celular:
             flash('Preencha pelo menos um campo.')
-            return render_template('bilhetes/consultar_bilhetes.html')
+            return render_template('usuario/consultar_bilhetes.html')
 
         db = get_db()
 
@@ -155,11 +155,11 @@ def consultar_bilhetes():
         rows = db.execute(sql, tuple(params)).fetchall()
         bilhetes_encontrados = [dict(r) for r in rows]
 
-        return render_template('bilhetes/resultados_consulta.html',
+        return render_template('usuario/resultados_consulta.html',
                                bilhetes_encontrados=bilhetes_encontrados)
 
     # GET
-    return render_template('bilhetes/consultar_bilhetes.html')
+    return render_template('usuario/consultar_bilhetes.html')
 
 
 
