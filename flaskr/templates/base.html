@@ -13,13 +13,13 @@
     <nav class="navbar">
       <h1>Bem vindo!</h1>
       <ul>
-        {% if g.user %}
-            <li><span>{{ g.user['username'] }}</span></li>
+        {% if g.admin %}
+            <li><span>{{ g.admin['username'] }}</span></li>
             <li><a class="navbar-item" href="{{ url_for('auth.logout_admin') }}">Sair</a></li>
-            <li><a class="navbar-item" href="{{ url_for('admin.index') }}">Área de Administrador</a></li>
+            <li><a class="navbar-item" href="{{ url_for('admin.index_admin') }}">Área de Administrador</a></li>
         {% else %}
             <li><a class="navbar-item" href="{{ url_for('auth.login_admin') }}">Área de Administrador</a></li>
-            <li><a class="navbar-item" href="{{ url_for('usuario.index') }}">Voltar ao Início</a></li>
+            <li><a class="navbar-item" href="{{ url_for('auth.index') }}">Voltar ao Início</a></li>
         {% endif %}
       </ul>
     </nav>

@@ -30,9 +30,9 @@ def monta_api_whats(nome_ganhador,sobrenome_ganhador,nome_sorteio,celular_ganhad
     api_whats = "https://api.whatsapp.com/send?phone=" + celular + "&text=" + texto
     return api_whats
 
-@bp.route('/index')
+@bp.route('/index_admin')
 @admin_required
-def index():
+def index_admin():
     return render_template('admin/index.html')
 
 

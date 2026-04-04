@@ -6,7 +6,7 @@
 <h1>Bem vindo ao Sistema de Sorteio WEB</h1>
 
   <div id="opcoes">
-    <a id="cadastrar" href="{{ url_for('usuario.cadastrar') }}">Sou novo usuário</a>
-    <a id="fazerlogin" href="{{ url_for('usuario.login') }}">Fazer login</a>
+    <a id="cadastrar" href="{{ url_for('auth.cadastrar_usuario') }}">Sou novo usuário</a>
+    <a id="fazerlogin" href="{{ url_for('auth.login_usuario') }}">Fazer login</a>
   </div> 
 {% endblock %}

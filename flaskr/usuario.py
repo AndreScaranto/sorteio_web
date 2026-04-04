@@ -7,8 +7,8 @@ import sqlite3
 
 bp = Blueprint('usuario', __name__)
 
-@bp.route('/')
-def index():
+@bp.route('/index_usuario')
+def index_usuario():
     return render_template('usuario/index.html')
 
 
