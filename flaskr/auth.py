@@ -6,8 +6,8 @@ from flaskr.db import get_db   # usa nosso helper (sqlite3.Row)
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-@bp.route("/login", methods=("GET", "POST"))
-def login():
+@bp.route("/login_admin", methods=("GET", "POST"))
+def login_admin():
     if request.method == "POST":
         # aceita vários nomes de campo pra evitar mismatch
         username = (
@@ -49,7 +49,7 @@ def login():
 
         flash(error)
 
-    return render_template("auth/login.html")
+    return render_template("auth/login_admin.html")
 
 
 
@@ -66,23 +66,23 @@ def load_logged_in_user():
         ).fetchone()
 
 
-@bp.route("/logout")
-def logout():
+@bp.route("/logout_admin")
+def logout_admin():
     session.clear()
     return redirect(url_for("admin.index"))
 
 
-def login_required(view):
+def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("auth.login_admin"))
         return view(**kwargs)
     return wrapped_view
 
 
 @bp.route("/alterar_admin", methods=("GET", "POST"))
-@login_required
+@admin_required
 def alterar_admin():
     if request.method == "POST":
         username = request.form.get("usuario_novo", "").strip()
@@ -127,7 +127,7 @@ def alterar_admin():
 
 
 @bp.route("/adicionar_admin", methods=("GET", "POST"))
-@login_required
+@admin_required
 def adicionar_admin():
     if request.method == "POST":
         new_username = request.form.get("usuario_novo", "").strip()

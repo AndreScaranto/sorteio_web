@@ -2,7 +2,7 @@
 from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
-from flaskr.auth import login_required
+from flaskr.auth import admin_required
 from flaskr.db import get_db
 import secrets
 import sqlite3
@@ -31,13 +31,13 @@ def monta_api_whats(nome_ganhador,sobrenome_ganhador,nome_sorteio,celular_ganhad
     return api_whats
 
 @bp.route('/index')
-@login_required
+@admin_required
 def index():
     return render_template('admin/index.html')
 
 
 @bp.route('/gerar_codigo', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def gerar_codigo():
     db = get_db()
 
@@ -70,7 +70,7 @@ def gerar_codigo():
                            sorteios=sorteios)
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def novo_sorteio():
     if request.method == 'POST':
         nome = (request.form.get('nome') or '').strip()
@@ -97,7 +97,7 @@ def novo_sorteio():
     return render_template('admin/novo_sorteio.html')
 
 @bp.route('/gerenciar_sorteios', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def gerenciar_sorteios():
     db = get_db()
 
@@ -140,7 +140,7 @@ def gerenciar_sorteios():
     )
 
 @bp.route('/alterar_sorteio', methods=['POST'])
-@login_required
+@admin_required
 def alterar_sorteio():
     if request.method == 'POST':
         if not ('sorteio_id' in request.form):
@@ -178,7 +178,7 @@ def alterar_sorteio():
 
 
 @bp.route('/sortear_bilhete', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def sortear_bilhete():
     db = get_db()
 
@@ -257,7 +257,7 @@ def sortear_bilhete():
 
 
 @bp.route('/consultar_vencedor', methods=('GET', 'POST'))
-@login_required
+@admin_required
 def consultar_vencedor():
     db = get_db()
 
@@ -307,7 +307,7 @@ def consultar_vencedor():
     )
 
 @bp.route("/depositar_bilhete", methods=("GET", "POST"))
-@login_required
+@admin_required
 def depositar_bilhete():
     db = get_db()
 
