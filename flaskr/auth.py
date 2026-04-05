@@ -251,6 +251,7 @@ def cadastrar_usuario():
         username = request.form.get("usuario", "").strip()
         password = request.form.get("senha", "")
         cpf = request.form.get("cpf", "")
+        celular = request.form.get("celular", "")
         db = get_db()
         error = None
 
@@ -260,6 +261,8 @@ def cadastrar_usuario():
             error = "Preencha sua senha."
         elif not cpf:
             error = "Preencha o CPF."
+        elif not celular:
+            error = "Preencha o celular."
 
         if error is None:
 
@@ -271,8 +274,8 @@ def cadastrar_usuario():
                 error = f"Já há um usuário cadastrado com o CPF {cpf}."
             else:
                 db.execute(
-                    "INSERT INTO usuario (username, password, cpf) VALUES (?, ?, ?)",
-                    (username, generate_password_hash(password),cpf)
+                    "INSERT INTO usuario (username, password, cpf,celular) VALUES (?, ?, ?, ?)",
+                    (username, generate_password_hash(password), cpf, celular)
                 )
                 db.commit()
                 flash(f"Novo usuario cadastrado com o nome {username} com sucesso.")
