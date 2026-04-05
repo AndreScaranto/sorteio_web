@@ -18,8 +18,14 @@
             <li><a class="navbar-item" href="{{ url_for('auth.logout_admin') }}">Sair</a></li>
             <li><a class="navbar-item" href="{{ url_for('admin.index_admin') }}">Área de Administrador</a></li>
         {% else %}
+          {% if g.usuario %}
+            <li><span>{{ g.usuario['username'] }}</span></li>
+            <li><a class="navbar-item" href="{{ url_for('auth.logout_usuario') }}">Sair</a></li>
+            <li><a class="navbar-item" href="{{ url_for('usuario.index_usuario') }}">Área de Usuário</a></li>
+          {% else %}
             <li><a class="navbar-item" href="{{ url_for('auth.login_admin') }}">Área de Administrador</a></li>
             <li><a class="navbar-item" href="{{ url_for('auth.index') }}">Voltar ao Início</a></li>
+          {% endif %}
         {% endif %}
       </ul>
     </nav>

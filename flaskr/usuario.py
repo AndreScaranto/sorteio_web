@@ -1,6 +1,7 @@
 from flask import (
     Blueprint, flash, redirect, render_template, request, url_for
 )
+from flaskr.auth import usuario_required
 from flaskr.db import get_db
 from datetime import datetime, timedelta
 import sqlite3
@@ -8,6 +9,7 @@ import sqlite3
 bp = Blueprint('usuario', __name__)
 
 @bp.route('/index_usuario')
+@usuario_required
 def index_usuario():
     return render_template('usuario/index.html')
 
