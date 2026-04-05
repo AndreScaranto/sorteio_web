@@ -3,7 +3,7 @@
 {% block title %}Cadastrar Novo Usuario{% endblock %}
 
 {% block content %}
-  <h2 style="margin-bottom: 20px;">Adicionar novo administrador</h2>
+  <h2 style="margin-bottom: 20px;">Cadastrar novo usuário</h2>
 
   <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 500px;">
     <label for="usuario">Nome:</label>
@@ -17,6 +17,18 @@
 
     <label for="celular">Celular:</label>
     <input name="celular" id="celular" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+
+    <div style="font-size:14px;"> 
+    <input type="checkbox" id="lgpd" required> 
+    
+    <label for="lgpd"> 
+    Declaro que li e concordo com a coleta e tratamento dos meus dados pessoais 
+    fornecidos neste formulário. Os dados serão utilizados exclusivamente para 
+    análise de comportamento do consumidor, contato e participação nos sorteios 
+    promovidos pela empresa, conforme a 
+    Lei Geral de Proteção de Dados (Lei nº 13.709/2018). 
+    </label> 
+    </div>
 
     <button type="submit" style="padding: 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px;">
       Cadastrar novo usuário
