@@ -96,33 +96,6 @@ def novo_sorteio():
 
     return render_template('admin/novo_sorteio.html')
 
-@bp.route('/adicionar_produto', methods=('GET', 'POST'))
-@admin_required
-def adicionar_produto():
-    if request.method == 'POST':
-        nome = (request.form.get('nome') or '').strip()
-        preco_atual = (request.form.get('preco') or '').strip()
-        preco_atual = round(float(preco_atual),2)
-
-        if not nome:
-            flash('Inserir o nome do produto.')
-        elif not preco_atual:
-            flash('Inserir o preço do produto.')
-        else:
-            db = get_db()
-            try:
-                db.execute(
-                    'INSERT INTO produto (nome, preco_atual) VALUES (?, ?)',
-                    (nome, preco_atual)
-                )
-                db.commit()
-                flash(f'{nome} criado com sucesso.')
-                return redirect('index_admin')
-            except sqlite3.IntegrityError:
-                flash(f'Já há um produto cadastrado com o nome {nome}.')
-            return render_template('admin/adicionar_produto.html')
-
-    return render_template('admin/adicionar_produto.html')
 
 @bp.route('/gerenciar_sorteios', methods=('GET', 'POST'))
 @admin_required
@@ -334,73 +307,111 @@ def consultar_vencedor():
         sorteios=sorteios
     )
 
-@bp.route("/depositar_bilhete", methods=("GET", "POST"))
+
+
+@bp.route('/adicionar_produto', methods=('GET', 'POST'))
 @admin_required
-def depositar_bilhete():
+def adicionar_produto():
+    if request.method == 'POST':
+        nome = (request.form.get('nome') or '').strip()
+        preco_atual = (request.form.get('preco') or '').strip()
+        preco_atual = round(float(preco_atual),2)
+
+        if not nome:
+            flash('Inserir o nome do produto.')
+        elif not preco_atual:
+            flash('Inserir o preço do produto.')
+        else:
+            db = get_db()
+            try:
+                db.execute(
+                    'INSERT INTO produto (nome, preco_atual) VALUES (?, ?)',
+                    (nome, preco_atual)
+                )
+                db.commit()
+                flash(f'{nome} criado com sucesso.')
+                return redirect('index_admin')
+            except sqlite3.IntegrityError:
+                flash(f'Já há um produto cadastrado com o nome {nome}.')
+            return render_template('admin/adicionar_produto.html')
+
+    return render_template('admin/adicionar_produto.html')
+
+@bp.route('/gerenciar_produtos', methods=('GET', 'POST'))
+@admin_required
+def gerenciar_produtos():
     db = get_db()
 
-    # carrega SEMPRE os sorteios (usado pelo template em qualquer retorno)
-    sorteios = db.execute(
-        "SELECT id_sorteio, nome FROM sorteio WHERE NOT realizado ORDER BY id_sorteio DESC"
+    produtos = db.execute(
+        'SELECT * FROM produto'
     ).fetchall()
 
-    if request.method == "POST":
-        nome       = (request.form.get("nome") or "").strip()
-        sobrenome  = (request.form.get("sobrenome") or "").strip()
-        celular    = (request.form.get("celular") or "").strip()
-        sorteio_id = request.form.get("sorteio_id")
-        codigo_raw = (request.form.get("codigo") or "").strip()
+    if request.method == 'POST':
 
-        # validações simples
-        if not nome or not sorteio_id or not codigo_raw:
-            flash("Preencha nome, sorteio e código.")
-            return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
+        if 'produto_id' in request.form:
+            produto_id = request.form.get('produto_id')
 
-        # código precisa ser número (INTEGER no banco)
-        try:
-            codigo_int = int(codigo_raw)
-        except ValueError:
-            flash("O código precisa ser numérico.")
-            return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
+            dados_escolhido = db.execute(
+                'SELECT * FROM produto WHERE id_produto = ?',
+                (produto_id,)
+            ).fetchone()
 
-        # 1) verifica se o código existe para esse sorteio
-        existe = db.execute(
-            "SELECT 1 FROM codigo WHERE codigo = ? AND id_sorteio = ?",
-            (codigo_int, sorteio_id)
-        ).fetchone()
-        if not existe:
-            flash("Código não existe para esse sorteio.")
-            return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
+            vendas = db.execute(
+                'SELECT * FROM venda WHERE id_produto = ?',
+                (produto_id,)
+            ).fetchall()
 
-        # 2) impede código repetido para o mesmo sorteio em bilhete
-        repetido = db.execute(
-            "SELECT 1 FROM bilhete WHERE id_sorteio = ? AND codigo = ?",
-            (sorteio_id, codigo_int)
-        ).fetchone()
-        if repetido:
-            flash("Este código já foi depositado para este sorteio.")
-            return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
+            total_vendas = len(vendas)
 
-        # 3) insere o bilhete
-        try:
-            db.execute(
-                """
-                INSERT INTO bilhete (id_sorteio, codigo, nome, sobrenome, celular)
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                (sorteio_id, codigo_int, nome, sobrenome, celular or None)
+            return render_template(
+                'admin/gerenciar_produtos.html',
+                produto_escolhido=True,
+                escolhido=dados_escolhido,
+                total_vendas=total_vendas,
+                produtos=produtos
             )
-            db.commit()
-        except sqlite3.IntegrityError:
-            flash("Não foi possível salvar o depósito.")
-            return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
-
-        flash("Bilhete depositado com sucesso!")
-        return redirect(url_for("admin.depositar_bilhete"))
-
-    # GET
-    return render_template("bilhetes/depositar_bilhete.html", sorteios=sorteios)
 
 
 
+    return render_template(
+        'admin/gerenciar_produtos.html',
+        produto_escolhido=False,
+        produtos=produtos
+    )
 
+
+@bp.route('/alterar_produto', methods=['POST'])
+@admin_required
+def alterar_produto():
+    if request.method == 'POST':
+        if not ('produto_id' in request.form):
+            return render_template('admin/gerenciar_produtos.html')
+        produto_id = request.form.get('produto_id')
+        if not ('nome' in request.form):
+            db = get_db()
+            produto = db.execute(
+                'SELECT * FROM produto WHERE id_produto = ?',
+                (produto_id,)
+            ).fetchone()
+            return render_template('admin/alterar_produto.html',produto=produto)
+        else:
+            nome = (request.form.get('nome') or '').strip()
+            preco_atual = (request.form.get('preco') or '').strip()
+
+            if not nome:
+                flash('Inserir o nome do produto.')
+            elif not preco_atual:
+                flash('Inserir o preço do produto.')
+            else:
+                db = get_db()
+                try:
+                    db.execute(
+                        'UPDATE produto SET nome = ?, preco_atual = ? WHERE id_produto = ?',
+                        (nome, preco_atual,produto_id)
+                    )
+                    db.commit()
+                    flash(f'{nome} atualizado com sucesso.')
+                    return redirect('gerenciar_produtos')
+                except sqlite3.IntegrityError:
+                    flash(f'Já há um produto cadastrado com o nome {nome}.')
+            return render_template('admin/alterar_produto.html',produto=produto)

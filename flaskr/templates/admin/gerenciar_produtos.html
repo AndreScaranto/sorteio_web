@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Sorteios Abertos{% endblock %}
+
+{% block content %}
+    <h2 style="margin-bottom: 20px;">Gerenciar Produtos</h2>
+
+    <div>
+
+    {% for produto in produtos %}
+        <form class="form_lista" method="post">
+            <input name="produto_id" type="hidden" value={{produto.id_produto}}>
+            <button class="opcao_lista" type="submit">{{produto.nome}}</button>
+        </form>
+    {% endfor %}
+    </div>
+    {% if produto_escolhido %}
+    <div style="border:1px;">
+        <p>Nome do produto: {{escolhido.nome}}</p>
+        <p>Preço padrão atual: R$ {{escolhido.preco_atual}}</p>
+        <p>Quantidade vendida: {{total_vendas}}</p>
+    </div>
+    <div>
+    <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;" action="{{ url_for('admin.alterar_produto') }}">
+        <input name="produto_id" type="hidden" value="{{escolhido.id_produto}}">
+        <button class="blue-button" type="submit">
+            Alterar Produto
+        </button>
+    </form>        
+    </div>
+    {% endif %}
+{% endblock %}
