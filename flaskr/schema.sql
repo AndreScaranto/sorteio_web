@@ -59,5 +59,6 @@ CREATE TABLE venda (
   data_venda TIMESTAMP NOT NULL,
   FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
   FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
-  preco_venda DECIMAL(10,2) NOT NULL
+  preco_venda DECIMAL(10,2) NOT NULL,
+  desconto DECIMAL(10,2) DEFAULT 0
 )
