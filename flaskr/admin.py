@@ -96,6 +96,34 @@ def novo_sorteio():
 
     return render_template('admin/novo_sorteio.html')
 
+@bp.route('/adicionar_produto', methods=('GET', 'POST'))
+@admin_required
+def adicionar_produto():
+    if request.method == 'POST':
+        nome = (request.form.get('nome') or '').strip()
+        preco_atual = (request.form.get('preco') or '').strip()
+        preco_atual = round(float(preco_atual),2)
+
+        if not nome:
+            flash('Inserir o nome do produto.')
+        elif not preco_atual:
+            flash('Inserir o preço do produto.')
+        else:
+            db = get_db()
+            try:
+                db.execute(
+                    'INSERT INTO produto (nome, preco_atual) VALUES (?, ?)',
+                    (nome, preco_atual)
+                )
+                db.commit()
+                flash(f'{nome} criado com sucesso.')
+                return redirect('index_admin')
+            except sqlite3.IntegrityError:
+                flash(f'Já há um produto cadastrado com o nome {nome}.')
+            return render_template('admin/adicionar_produto.html')
+
+    return render_template('admin/adicionar_produto.html')
+
 @bp.route('/gerenciar_sorteios', methods=('GET', 'POST'))
 @admin_required
 def gerenciar_sorteios():

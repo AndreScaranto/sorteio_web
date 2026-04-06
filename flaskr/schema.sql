@@ -51,14 +51,17 @@ CREATE TABLE sorteio (
 CREATE TABLE produto (
   id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT UNIQUE NOT NULL,
-  preco_atual DECIMAL(10,2) NOT NULL 
-)
+  preco_atual DECIMAL(10,2) NOT NULL,
+  ativo BOOLEAN DEFAULT 1
+);
 
 CREATE TABLE venda (
   id_venda INTEGER PRIMARY KEY AUTOINCREMENT,
   data_venda TIMESTAMP NOT NULL,
-  FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
-  FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
+  id_usuario INTEGER NOT NULL,
+  id_produto INTEGER NOT NULL,
   preco_venda DECIMAL(10,2) NOT NULL,
-  desconto DECIMAL(10,2) DEFAULT 0
-)
+  desconto DECIMAL(10,2) DEFAULT 0,
+  FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+  FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+);
