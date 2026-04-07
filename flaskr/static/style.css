@@ -132,7 +132,19 @@ a {
     border-radius: 5px;
 }
 
+/* Área de Usuario */
 
+td {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 5px;
+}
+
+th {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 5px;
+}
 
 /* Área de ADM */
 

@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for
+    Blueprint, flash, redirect, render_template, request, url_for, session
 )
 from flaskr.auth import usuario_required
 from flaskr.db import get_db
@@ -164,4 +164,30 @@ def consultar_bilhetes():
     return render_template('usuario/consultar_bilhetes.html')
 
 
+@bp.route('/participar_sorteio')
+@usuario_required
+def participar_sorteio():
+    return render_template('usuario/depositar_bilhete.html')
 
+
+@bp.route('/consultar_compras')
+@usuario_required
+def consultar_compras():
+    id_usuario = session["user_id"]
+    db = get_db()
+    compras = db.execute(
+        'SELECT ' + 
+        ' venda.id_venda AS id_venda, ' +
+        ' venda.id_usuario AS id_usuario, ' +
+        ' venda.preco_venda AS preco, ' +
+        ' venda.quantidade_vendida AS quantidade, ' +
+        ' venda.data_venda AS data, ' +
+        ' produto.nome AS produto ' +
+        ' FROM venda ' +
+        ' INNER JOIN produto ON venda.id_produto = produto.id_produto '+
+         ' WHERE id_usuario = ?', (id_usuario,)
+    ).fetchall()
+    if compras:
+        return render_template('usuario/consultar_compras.html',compra_encontrada=True,compras=compras)
+    else:
+        return render_template('usuario/consultar_compras.html',compra_encontrada=False)

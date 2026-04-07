@@ -3,9 +3,17 @@
  {% block title %}Bem vindo ao Sistema de Sorteio WEB{% endblock %}
 
 {% block content %}
-<h1>Bem vindo à Área de Usuário Sistema de Sorteio WEB</h1>
+<h2>Bem vindo à Área de Usuário Sistema de Sorteio WEB</h1>
 
-  <div id="opcoes">
-    <p>Em construção</p>
-  </div> 
+  <article>
+    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+
+      <h3 style="margin-top: 10px;">🎲 Sorteios</h3>
+      <a href="{{ url_for('usuario.participar_sorteio') }}" style="text-decoration: none; background-color: #4400ff; color: white; padding: 10px; border-radius: 5px;">Participar de sorteio</a>
+   
+      <h3 style="margin-top: 10px;">🛍️ Compras</h3>
+      <a href="{{ url_for('usuario.consultar_compras') }}" style="text-decoration: none; background-color: #633d05; color: white; padding: 10px; border-radius: 5px;">Consultar minhas compras</a>
+
+    </div>
+  </article>
 {% endblock %}
