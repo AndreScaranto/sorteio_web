@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Nova Venda{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Registrar Nova Venda</h2>
+
+  <form class="formulario" method="post" style="gap: 12px;">
+    {% if not comprador %}
+
+      <div>
+        <label for="celular" style="font-weight: bold;">Celular do Comprador</label><br>
+        <input class="inserir" name="celular" id="celular" required>
+      </div>
+      
+      <button class="blue-button" type="submit">
+        Consultar Celulares Cadastrados
+      </button>
+    {% else %}
+      <input name="id_usuario" type="hidden" value="{{comprador.id_usuario}}">
+      <div>
+        <label for="celular" style="font-weight: bold;">Celular do Comprador</label><br>
+        <input class="inserir" name="celular" id="celular" value="{{comprador.celular}}" required>
+      </div>
+      <div>
+        <label for="nome_comprador" style="font-weight: bold;">Nome do Comprador</label><br>
+        <input class="inserir" name="nome_comprador" id="nome" value="{{comprador.username}}" required>
+      </div>
+      <div>
+        <select name="id_produto" id="id_produto" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+          {% for produto in produtos %}
+            <option value="{{ produto.id_produto }}">{{ produto.nome }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="preco" style="font-weight: bold;">Preço de Venda</label><br>
+        <input class="inserir" name="preco" id="preco" type="number" step="0.01" required>
+      </div>
+      <input name="preco_atual" id="preco_atual" type="hidden" value="{{comprador.id_usuario}}">
+      <div>
+        <label for="quantidade" style="font-weight: bold;">Quantidade Vendida</label><br>
+        <input class="inserir" name="quantidade" id="quantidade" type="number" step="1" value="1" required>
+      </div>
+      <button class="blue-button" type="submit">
+        Registrar Venda
+      </button>      
+
+  </form>
+      <script>
+        const products = {{ produtos | tojson | safe }};
+        const selectProduto_ID = document.getElementById("id_produto");
+        const precoAtual = document.getElementById("preco_atual");
+        const preco = document.getElementById("preco");
+        var tabelaPrecos = {};
+        products.forEach(p => tabelaPrecos[p.id_produto] = p.preco_atual)
+        selectProduto_ID.addEventListener("change", consultaTabela); 
+        function consultaTabela(e) {
+          preco.value = tabelaPrecos[e.target.value];
+          precoAtual.value = tabelaPrecos.get[e.target.value];
+        };
+      </script>
+    {% endif %}
+{% endblock %}

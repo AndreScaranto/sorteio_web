@@ -61,7 +61,8 @@ CREATE TABLE venda (
   id_usuario INTEGER NOT NULL,
   id_produto INTEGER NOT NULL,
   preco_venda DECIMAL(10,2) NOT NULL,
-  desconto DECIMAL(10,2) DEFAULT 0,
+  desconto_unitario DECIMAL(10,2) DEFAULT 0,
+  quantidade_vendida INTEGER NOT NULL,
   FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
   FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
 );

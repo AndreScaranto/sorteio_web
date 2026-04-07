@@ -4,6 +4,7 @@ from flask import (
 )
 from flaskr.auth import admin_required
 from flaskr.db import get_db
+from datetime import datetime
 import secrets
 import sqlite3
 import random, string
@@ -307,7 +308,50 @@ def consultar_vencedor():
         sorteios=sorteios
     )
 
-
+@bp.route('/registrar_venda', methods=('GET', 'POST'))
+@admin_required
+def registrar_venda():
+    if request.method == 'POST':
+        celular = request.form.get('celular')          
+        if not celular:
+            return render_template('admin/registrar_venda.html')
+        else:
+            id_produto = request.form.get('id_produto')
+            db = get_db()
+            if not id_produto:
+                try:
+                    comprador = db.execute(
+                        'SELECT * FROM usuario WHERE celular = ?',
+                        (celular,)
+                    ).fetchone()
+                    if not comprador:
+                        flash(f'Não foi encontrado usuário com o celular {celular}.')
+                    else:
+                        produtos_query = db.execute(
+                        'SELECT * FROM produto').fetchall()
+                        produtos = [dict(row) for row in produtos_query]
+                        return render_template('admin/registrar_venda.html',comprador=comprador,produtos=produtos)
+                except:
+                    flash(f'Não foi encontrado usuário com o celular {celular}.')
+            else:
+                id_usuario = request.form.get('id_usuario')
+                data_venda = datetime.now()
+                preco = request.form.get('preco')
+                preco_atual = request.form.get('preco_atual')
+                desconto_unitario = float(preco) - float(preco_atual)
+                quantidade_vendida = request.form.get('quantidade')
+                try:
+                    db.execute(
+                        'INSERT INTO venda (data_venda,id_usuario,id_produto,preco_venda,desconto_unitario,quantidade_vendida)' +
+                         ' VALUES (?, ?, ?, ?, ?, ?)',
+                        (data_venda,id_usuario,id_produto,preco,desconto_unitario,quantidade_vendida)
+                    )
+                    db.commit()
+                    flash(f'Venda registrada com sucesso.')
+                    return redirect('index_admin')
+                except Exception as e:
+                    flash(f'Erro no registro da venda: {e}')                
+    return render_template('admin/registrar_venda.html')
 
 @bp.route('/adicionar_produto', methods=('GET', 'POST'))
 @admin_required
@@ -356,12 +400,10 @@ def gerenciar_produtos():
                 (produto_id,)
             ).fetchone()
 
-            vendas = db.execute(
-                'SELECT * FROM venda WHERE id_produto = ?',
+            total_vendas = db.execute(
+                'SELECT SUM(quantidade_vendida) FROM venda WHERE id_produto = ?',
                 (produto_id,)
-            ).fetchall()
-
-            total_vendas = len(vendas)
+            ).fetchone()[0]
 
             return render_template(
                 'admin/gerenciar_produtos.html',
