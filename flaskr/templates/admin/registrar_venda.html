@@ -27,6 +27,7 @@
         <input class="inserir" name="nome_comprador" id="nome" value="{{comprador.username}}" required>
       </div>
       <div>
+        <label for="id_produto" style="font-weight: bold;">Produto Vendido</label><br>
         <select name="id_produto" id="id_produto" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
           {% for produto in produtos %}
             <option value="{{ produto.id_produto }}">{{ produto.nome }}</option>
@@ -35,7 +36,7 @@
       </div>
       <div>
         <label for="preco" style="font-weight: bold;">Preço de Venda</label><br>
-        <input class="inserir" name="preco" id="preco" type="number" step="0.01" required>
+        <input class="inserir" name="preco" id="preco" value="{{produtos[0].preco_atual}}" type="number" step="0.01" required>
       </div>
       <input name="preco_atual" id="preco_atual" type="hidden" value="{{comprador.id_usuario}}">
       <div>

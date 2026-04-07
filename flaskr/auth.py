@@ -278,8 +278,15 @@ def cadastrar_usuario():
                     (username, generate_password_hash(password), cpf, celular)
                 )
                 db.commit()
+                user = db.execute(
+                "SELECT id_usuario, username FROM usuario WHERE username = ?",
+                (username,)
+                ).fetchone()
+                session.clear()
+                session["user_id"] = user["id_usuario"]
+                session["auth_type"] = "usuario"
                 flash(f"Novo usuario cadastrado com o nome {username} com sucesso.")
-                return render_template("auth/cadastrar_usuario.html", resultado=(True, username))
+                return redirect(url_for("usuario.index_usuario"))
 
         flash(error)
     return render_template("auth/cadastrar_usuario.html")
