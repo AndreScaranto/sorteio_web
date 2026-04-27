@@ -41,6 +41,7 @@ CREATE TABLE codigo (
 CREATE TABLE sorteio (
   id_sorteio INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT UNIQUE NOT NULL,
+  data_inicial TIMESTAMP NOT NULL,
   data_limite TIMESTAMP NOT NULL,
   realizado BOOLEAN DEFAULT 0,
   id_bilhete_sorteado INTEGER DEFAULT NULL,

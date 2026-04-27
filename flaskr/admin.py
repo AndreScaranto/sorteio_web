@@ -85,8 +85,8 @@ def novo_sorteio():
             db = get_db()
             try:
                 db.execute(
-                    'INSERT INTO sorteio (nome, data_limite) VALUES (?, ?)',
-                    (nome, data_limite)
+                    'INSERT INTO sorteio (nome, data_inicial, data_limite) VALUES (?, ?, ?)',
+                    (nome, datetime.now(), data_limite)
                 )
                 db.commit()
                 flash(f'{nome} criado com sucesso.')
