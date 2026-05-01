@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS administrador;
+DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS bilhete;
 DROP TABLE IF EXISTS codigo;
 DROP TABLE IF EXISTS sorteio;
-DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS produto;
 DROP TABLE IF EXISTS venda;
 
@@ -43,6 +43,7 @@ CREATE TABLE sorteio (
   nome TEXT UNIQUE NOT NULL,
   data_inicial TIMESTAMP NOT NULL,
   data_limite TIMESTAMP NOT NULL,
+  valor_por_bilhete INTEGER NOT NULL,
   realizado BOOLEAN DEFAULT 0,
   id_bilhete_sorteado INTEGER DEFAULT NULL,
   FOREIGN KEY (id_bilhete_sorteado) REFERENCES bilhete(id_bilhete),
