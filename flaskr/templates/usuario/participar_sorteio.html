@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Participar de Sorteios{% endblock %}
+
+{% block content %}
+    <h2 style="margin-bottom: 20px;">Sorteios</h2>
+
+    <div>
+        {% if sorteios_abertos %}
+        <table style="margin: 10px;">
+            <tr>
+                <th>N° Registro </th>
+                <th>Produto </th>
+                <th>Preço Unitário</th>
+                <th>Quantidade </th>
+                <th>Valor Total</th>
+                <th>Data / Hora </th>
+            </tr>
+
+            {% for sorteio in sorteios %}
+                <tr>
+                    <td>{{compra.id_venda}}</td>
+                    <td>{{compra.produto}}</td>
+                    <td>R$ {{compra.preco}}</td>
+                    <td>{{compra.quantidade}}</td>
+                    <td>R$ {{compra.quantidade * compra.preco}}</td>
+                    <td>{{compra.data}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p style="margin: 10px;">No momento não há nenhum sorteio aberto</p>
+        {% endif %}
+        <a href="{{ url_for('usuario.index_usuario') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; margin: 10px;">Voltar para a área de usuário</a>
+    </div>
+{% endblock %}

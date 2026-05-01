@@ -11,18 +11,27 @@
       <input class="inserir" name="nome" id="nome" required>
     </div>
     <div>
-      <label for="boolean_data_limite" style="font-weight: bold;">Usar Data Limite?</label><br>
-      <input name="boolean_data_limite" id="boolean_data_limite" type="checkbox" onclick ="alternarAtivaDataLimite()">
-    </div>
-    <div>
-      <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
-      <input class="inserir" name="data_limite" id="data_limite" type="date" disabled>
+      <label for="data_inicial" style="font-weight: bold;">Data Inicial</label><br>
+      <input class="inserir" name="data_inicial" id="data_inicial" type="date" required>
     </div>
     <script>
-      function alternarAtivaDataLimite() {
-        document.getElementById("data_limite").disabled = !document.getElementById("data_limite").disabled;
+      function definirDataInicialPadrao() {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        document.getElementById("data_inicial").value = `${ano}-${mes}-${dia}`;
       }
+      definirDataInicialPadrao();
     </script>
+    <div>
+      <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
+      <input class="inserir" name="data_limite" id="data_limite" type="date" required>
+    </div>
+    <div>
+      <label for="valor_por_bilhete" style="font-weight: bold;">Valor de compras para cada bilhete</label><br>
+      <nobr>R$</nobr><input class="inserir" name="valor_por_bilhete" id="valor_por_bilhete" type="number">
+    </div>
     <button class="blue-button" type="submit">
       Criar Sorteio
     </button>

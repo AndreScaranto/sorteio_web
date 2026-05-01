@@ -122,52 +122,22 @@ def depositar_bilhete():
     return render_template('usuario/depositar_bilhete.html')
 
 
-@bp.route('/consultar_bilhetes', methods=('GET','POST'))
-def consultar_bilhetes():
-    if request.method == 'POST':
-        codigo = (request.form.get('codigo') or '').strip()
-        celular    = (request.form.get('celular') or '').strip()
-
-        if not codigo and not celular:
-            flash('Preencha pelo menos um campo.')
-            return render_template('usuario/consultar_bilhetes.html')
-
-        db = get_db()
-
-        sql = (
-            'SELECT '
-            '  bilhete.id_bilhete AS id_bilhete, '
-            '  bilhete.codigo    AS codigo, '
-            '  bilhete.celular   AS celular, '
-            '  sorteio.nome      AS nome_sorteio, '
-            '  sorteio.realizado AS realizado, '
-            '  sorteio.id_bilhete_sorteado AS id_sorteado '
-            'FROM bilhete '
-            'INNER JOIN sorteio ON bilhete.id_sorteio = sorteio.id_sorteio '
-            'WHERE 1=1 '
-        )
-        params = []
-
-
-        # filtro por celular (LIKE)
-        if celular:
-            sql += ' AND bilhete.celular LIKE ?'
-            params.append(f'%{celular}%')
-
-        rows = db.execute(sql, tuple(params)).fetchall()
-        bilhetes_encontrados = [dict(r) for r in rows]
-
-        return render_template('usuario/resultados_consulta.html',
-                               bilhetes_encontrados=bilhetes_encontrados)
-
-    # GET
-    return render_template('usuario/consultar_bilhetes.html')
-
-
-@bp.route('/participar_sorteio')
+@bp.route('/participar_sorteio', methods=('GET','POST'))
 @usuario_required
 def participar_sorteio():
-    return render_template('usuario/depositar_bilhete.html')
+    id_usuario = session["user_id"]
+    db = get_db()
+    if request.method == 'POST':
+        return render_template('usuario/participar_sorteio.html')
+
+    # GET
+    sorteios = db.execute(
+        'SELECT * FROM sorteio WHERE data_limite > ? AND data_inicial < ?', (datetime.now(),datetime.now(),)
+    ).fetchall()
+    if sorteios:
+        return render_template('usuario/participar_sorteio.html',sorteios=sorteios,sorteios_abertos=True)
+    else:
+        return render_template('usuario/participar_sorteio.html',sorteios_abertos=False)
 
 
 @bp.route('/consultar_compras')

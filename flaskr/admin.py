@@ -76,6 +76,8 @@ def novo_sorteio():
     if request.method == 'POST':
         nome = (request.form.get('nome') or '').strip()
         data_limite = (request.form.get('data_limite') or '').strip()
+        data_inicial = (request.form.get('data_inicial') or '').strip()
+        valor_por_bilhete = (request.form.get('valor_por_bilhete') or '').strip()
 
         if not nome:
             flash('Inserir o nome do sorteio.')
@@ -85,8 +87,8 @@ def novo_sorteio():
             db = get_db()
             try:
                 db.execute(
-                    'INSERT INTO sorteio (nome, data_inicial, data_limite) VALUES (?, ?, ?)',
-                    (nome, datetime.now(), data_limite)
+                    'INSERT INTO sorteio (nome, data_inicial, data_limite, valor_por_bilhete) VALUES (?, ?, ?, ?)',
+                    (nome, data_inicial, data_limite, valor_por_bilhete)
                 )
                 db.commit()
                 flash(f'{nome} criado com sucesso.')
