@@ -154,7 +154,12 @@ def participar_sorteio():
                 dados = db.execute(query,(id_usuario,id_usuario,id_sorteio,)).fetchone()
                 depositados = depositados + 1
         db.commit()
-        flash("Foram depositados " + str(depositados) + " bilhetes")
+        if depositados == 1:
+            flash("Foi depositado 1 bilhete no sorteio " + dados["nome_sorteio"] + ".")
+        elif depositados == 0:
+            flash("Não foi possível depositar bilhetes.")
+        else:
+            flash("Foram depositados " + str(depositados) + " bilhetes no sorteio " + dados["nome_sorteio"] + ".")
         with current_app.open_resource('query_usuario.sql') as f:
             sorteios = db.execute(f.read().decode('utf8'),(id_usuario,id_usuario,)).fetchall()
         return render_template('usuario/participar_sorteio.html',sorteios=sorteios,sorteios_abertos=True)
