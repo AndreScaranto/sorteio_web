@@ -7,27 +7,43 @@
 
     <div>
         {% if sorteios_abertos %}
-        <table style="margin: 10px;">
-            <tr>
-                <th>N° Registro </th>
-                <th>Produto </th>
-                <th>Preço Unitário</th>
-                <th>Quantidade </th>
-                <th>Valor Total</th>
-                <th>Data / Hora </th>
-            </tr>
-
-            {% for sorteio in sorteios %}
+            <table style="margin: 10px;">
                 <tr>
-                    <td>{{compra.id_venda}}</td>
-                    <td>{{compra.produto}}</td>
-                    <td>R$ {{compra.preco}}</td>
-                    <td>{{compra.quantidade}}</td>
-                    <td>R$ {{compra.quantidade * compra.preco}}</td>
-                    <td>{{compra.data}}</td>
+                    <th>N° Sorteio</th>
+                    <th>Nome</th>
+                    <th>Data Limite</th>
+                    <th>Valor Gasto Válido</th>
+                    <th>Valor Já Depositado</th>
+                    <th>Valor Disponível</th>
+                    <th>Valor Por Bilhete</th>
+                    <th>Participar</th>
                 </tr>
-            {% endfor %}
-        </table>
+
+                {% for sorteio in sorteios %}
+                    <tr>
+                        <td>{{sorteio.id_sorteio}}</td>
+                        <td>{{sorteio.nome_sorteio}}</td>
+                        <td>{{sorteio.data_limite}}</td>
+                        <td>R$ {{sorteio.total_comprado}}</td>
+                        <td>R$ {{sorteio.valor_convertido}}</td>
+                        <td>R$ {{sorteio.total_comprado - sorteio.valor_convertido}}</td>
+                        <td>R$ {{sorteio.valor_por_bilhete}}</td>
+                        <td>
+                            {%if sorteio.pode_depositar %}
+                                <form class="formulario" style="margin: 0px" method="post" disabled>
+                                        <input type="hidden" name="id_sorteio" value={{sorteio.id_sorteio}}>
+                                        <input type="hidden" name="valor_por_bilhete" value={{sorteio.valor_por_bilhete}}>
+                                        <nobr><input type="number" style="min-width: 50px; margin-bottom: 0px" value="1" id="quantidade_bilhetes" name="quantidade_bilhetes" min="1" max={{(sorteio.total_comprado - sorteio.valor_convertido)//sorteio.valor_por_bilhete}}>
+                                        <button class="blue-button" style="padding: 2px" type="submit">Depositar</button></nobr>
+                                    {% else %}
+                                        <nobr><input disabled type="number" style="min-width: 50px; margin-bottom: 0px" value="0" min="0" max="0">
+                                        <button class="blue-button" style="padding: 2px; background-color: gray" type="submit" disabled>Depositar</button></nobr>
+                                    {% endif %}
+                            </form>                            
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         {% else %}
         <p style="margin: 10px;">No momento não há nenhum sorteio aberto</p>
         {% endif %}

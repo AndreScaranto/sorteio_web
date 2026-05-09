@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS administrador;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS bilhete;
-DROP TABLE IF EXISTS codigo;
 DROP TABLE IF EXISTS sorteio;
 DROP TABLE IF EXISTS produto;
 DROP TABLE IF EXISTS venda;
@@ -23,19 +22,11 @@ CREATE TABLE usuario (
 
 CREATE TABLE bilhete (
   id_bilhete INTEGER PRIMARY KEY AUTOINCREMENT,
-  codigo INTEGER UNIQUE NOT NULL,
-  nome TEXT NOT NULL,
-  sobrenome TEXT NOT NULL,
-  celular TEXT NOT NULL,
+  id_usuario INTEGER NOT NULL,
   id_sorteio INTEGER NOT NULL,
-  FOREIGN KEY (id_sorteio) REFERENCES sorteio(id_sorteio)
-);
-
-CREATE TABLE codigo (
-  id_codigo INTEGER PRIMARY KEY AUTOINCREMENT,
-  codigo INTEGER NOT NULL,
-  id_sorteio INTEGER NOT NULL,
-  FOREIGN KEY (id_sorteio) REFERENCES sorteio(id_sorteio)
+  valor_depositado DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (id_sorteio) REFERENCES sorteio(id_sorteio),
+  FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
 CREATE TABLE sorteio (
@@ -43,7 +34,7 @@ CREATE TABLE sorteio (
   nome TEXT UNIQUE NOT NULL,
   data_inicial TIMESTAMP NOT NULL,
   data_limite TIMESTAMP NOT NULL,
-  valor_por_bilhete INTEGER NOT NULL,
+  valor_por_bilhete DECIMAL(10,2) NOT NULL,
   realizado BOOLEAN DEFAULT 0,
   id_bilhete_sorteado INTEGER DEFAULT NULL,
   FOREIGN KEY (id_bilhete_sorteado) REFERENCES bilhete(id_bilhete),

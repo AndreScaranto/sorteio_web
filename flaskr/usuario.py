@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, request, url_for, session
+    Blueprint, flash, redirect, render_template, request, url_for, session, current_app
 )
 from flaskr.auth import usuario_required
 from flaskr.db import get_db
@@ -127,17 +127,38 @@ def depositar_bilhete():
 def participar_sorteio():
     id_usuario = session["user_id"]
     db = get_db()
-    if request.method == 'POST':
-        return render_template('usuario/participar_sorteio.html')
-
     # GET
-    sorteios = db.execute(
-        'SELECT * FROM sorteio WHERE data_limite > ? AND data_inicial < ?', (datetime.now(),datetime.now(),)
-    ).fetchall()
-    if sorteios:
+
+    with current_app.open_resource('query_usuario.sql') as f:
+        sorteios = db.execute(f.read().decode('utf8'),(id_usuario,id_usuario,)).fetchall()
+
+    if request.method == 'GET':
+        if sorteios:
+            return render_template('usuario/participar_sorteio.html',sorteios=sorteios,sorteios_abertos=True)
+        else:
+            return render_template('usuario/participar_sorteio.html',get=True,sorteios_abertos=False)        
+
+    # POST
+    if request.method == 'POST':
+        quantidade = int(request.form.get('quantidade_bilhetes'))
+        id_sorteio = int(request.form.get('id_sorteio'))
+        valor_por_bilhete = float(request.form.get('valor_por_bilhete'))
+        depositados = 0
+        with current_app.open_resource('query_usuario.sql') as f:
+            query = f.read().decode('utf8') + "\n WHERE sorteio.id_sorteio = ?"
+            print(query)
+            dados = db.execute(query,(id_usuario,id_usuario,id_sorteio,)).fetchone()
+            print(dados)
+            while depositados < quantidade and dados["total_comprado"] - dados["valor_convertido"] > valor_por_bilhete:
+                db.execute('INSERT INTO bilhete (id_sorteio,id_usuario,valor_depositado) VALUES (?,?,?)', (id_sorteio,id_usuario,valor_por_bilhete,))
+                dados = db.execute(query,(id_usuario,id_usuario,id_sorteio,)).fetchone()
+                depositados = depositados + 1
+        db.commit()
+        flash("Foram depositados " + str(depositados) + " bilhetes")
+        with current_app.open_resource('query_usuario.sql') as f:
+            sorteios = db.execute(f.read().decode('utf8'),(id_usuario,id_usuario,)).fetchall()
         return render_template('usuario/participar_sorteio.html',sorteios=sorteios,sorteios_abertos=True)
-    else:
-        return render_template('usuario/participar_sorteio.html',sorteios_abertos=False)
+
 
 
 @bp.route('/consultar_compras')
