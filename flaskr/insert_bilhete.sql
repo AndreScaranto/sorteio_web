@@ -1,0 +1,1 @@
+INSERT INTO bilhete (id_usuario,id_sorteio) VALUES (8, 1)
