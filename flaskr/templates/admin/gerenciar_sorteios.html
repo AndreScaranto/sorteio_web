@@ -18,7 +18,9 @@
     <div style="border:1px;">
         <p>Nome do sorteio: {{escolhido.nome}}</p>
         <p>Quantidade de bilhetes depositados: {{total_bilhetes}}</p>
+        <p>Data inicial para depósito de bilhetes: {{escolhido.data_inicial}}</p>
         <p>Data limite para depósito de bilhetes: {{escolhido.data_limite}}</p>
+        <p>Valor de vendas para cada bilhete depositado: R$ {{"{:,.2f}".format(escolhido.valor_por_bilhete).replace(".",",")}}</p>
     </div>
     <div>
     <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;" action="{{ url_for('admin.alterar_sorteio') }}">

@@ -127,6 +127,8 @@ def alterar_sorteio():
         else:
             nome = (request.form.get('nome') or '').strip()
             data_limite = (request.form.get('data_limite') or '').strip()
+            data_inicial = (request.form.get('data_inicial') or '').strip()
+            valor_por_bilhete = (request.form.get('valor_por_bilhete') or '').strip()
 
             if not nome:
                 flash('Inserir o nome do sorteio.')
@@ -136,11 +138,11 @@ def alterar_sorteio():
                 db = get_db()
                 try:
                     db.execute(
-                        'UPDATE sorteio SET nome = ?, data_limite = ? WHERE id_sorteio = ?',
-                        (nome, data_limite,sorteio_id)
+                        'UPDATE sorteio SET nome = ?, data_inicial = ?, data_limite = ?, valor_por_bilhete = ? WHERE id_sorteio = ?',
+                        (nome, data_inicial, data_limite, valor_por_bilhete, sorteio_id)
                     )
                     db.commit()
-                    flash(f'{nome} atualizado com sucesso.')
+                    flash(f'Sorteio {nome} atualizado com sucesso.')
                     return redirect('gerenciar_sorteios')
                 except sqlite3.IntegrityError:
                     flash(f'Já há um sorteio cadastrado com o nome {nome}.')

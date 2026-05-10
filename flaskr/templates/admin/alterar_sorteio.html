@@ -12,18 +12,17 @@
       <input class="inserir" name="nome" id="nome" value="{{sorteio.nome}}" required>
     </div>
     <div>
-      <label for="boolean_data_limite" style="font-weight: bold;">Usar Data Limite?</label><br>
-      <input name="boolean_data_limite" id="boolean_data_limite" type="checkbox" onclick ="alternarAtivaDataLimite()">
+      <label for="data_inicial" style="font-weight: bold;">Data Inicial</label><br>
+      <input class="inserir" name="data_inicial" id="data_inicial" type="date" value="{{sorteio.data_inicial}}" required>
     </div>
     <div>
       <label for="data_limite" style="font-weight: bold;">Data Limite</label><br>
-      <input class="inserir" name="data_limite" id="data_limite" type="date" value="{{sorteio.data_limite}}" disabled>
+      <input class="inserir" name="data_limite" id="data_limite" type="date" value="{{sorteio.data_limite}}">
     </div>
-    <script>
-      function alternarAtivaDataLimite() {
-        document.getElementById("data_limite").disabled = !document.getElementById("data_limite").disabled;
-      }
-    </script>
+    <div>
+      <label for="valor_por_bilhete" style="font-weight: bold;">Valor de compras para cada bilhete</label><br>
+      <nobr>R$</nobr><input class="inserir" name="valor_por_bilhete" id="valor_por_bilhete" value="{{sorteio.valor_por_bilhete}}" type="number">
+    </div>
     <button class="blue-button" type="submit">
       Alterar Sorteio
     </button>
