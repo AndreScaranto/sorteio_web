@@ -11,8 +11,8 @@ import random, string
 
 bp = Blueprint('admin', __name__)
 
-def monta_api_whats(nome_ganhador,sobrenome_ganhador,nome_sorteio,celular_ganhador):
-    texto = f"Cara(o) {nome_ganhador} {sobrenome_ganhador}, você foi sorteada(o) no sorteio {nome_sorteio} da Padocaffe, parabéns! "
+def monta_api_whats(nome_ganhador,nome_sorteio,celular_ganhador):
+    texto = f"Cara(o) {nome_ganhador}, você foi sorteada(o) no sorteio {nome_sorteio} da Padocaffe, parabéns! "
     texto += "Por favor, entre em contato conosco para combinarmos a entrega do seu prêmio."
     celular_base = (celular_ganhador).replace("-","")
     celular_base = celular_base.replace("(","")
@@ -36,39 +36,6 @@ def monta_api_whats(nome_ganhador,sobrenome_ganhador,nome_sorteio,celular_ganhad
 def index_admin():
     return render_template('admin/index.html')
 
-
-@bp.route('/gerar_codigo', methods=('GET', 'POST'))
-@admin_required
-def gerar_codigo():
-    db = get_db()
-
-    if request.method == 'POST':
-        if 'sorteio_id' in request.form:
-            possibilidades = string.ascii_uppercase + string.digits
-            codigo = ""
-            for i in range(7):
-                for j in range(5):
-                    codigo += random.choice(possibilidades)
-                if i < 6:
-                    codigo += "-"
-            db = get_db()
-            db.execute(
-                'INSERT INTO codigo (codigo, id_sorteio) VALUES (?, ?)',
-                (codigo, request.form['sorteio_id'])
-            )
-            db.commit()
-            return render_template(
-                'admin/gerar_codigo.html',
-                sorteio_escolhido=True,
-                codigo=codigo
-            )
-
-    sorteios = db.execute(
-        'SELECT * FROM sorteio WHERE NOT realizado'
-    ).fetchall()
-    return render_template('admin/gerar_codigo.html',
-                           sorteio_escolhido=False,
-                           sorteios=sorteios)
 
 @bp.route('/novo_sorteio', methods=('GET', 'POST'))
 @admin_required
@@ -192,7 +159,7 @@ def sortear_bilhete():
             sorteio_id = request.form.get('sorteio_id')
 
             bilhetes = db.execute(
-                'SELECT * FROM bilhete WHERE id_sorteio = ?',
+                'SELECT usuario.username AS username, usuario.celular AS celular, bilhete.id_bilhete AS id_bilhete FROM bilhete INNER JOIN usuario ON bilhete.id_usuario = usuario.id_usuario WHERE id_sorteio = ?',
                 (sorteio_id,)
             ).fetchall()
 
@@ -218,7 +185,8 @@ def sortear_bilhete():
             id_bilhete = request.form.get('id_bilhete')
 
             sorteado = db.execute(
-                'SELECT * FROM bilhete WHERE id_bilhete = ?',
+                'SELECT usuario.username AS username, usuario.celular AS celular, bilhete.id_sorteio AS id_sorteio, bilhete.id_bilhete AS id_bilhete ' +
+                ' FROM bilhete INNER JOIN usuario ON bilhete.id_usuario = usuario.id_usuario WHERE id_bilhete = ?',
                 (id_bilhete,)
             ).fetchone()
 
@@ -238,7 +206,7 @@ def sortear_bilhete():
                 (sorteado['id_sorteio'],)
             ).fetchone()
 
-            api_whats = monta_api_whats(sorteado['nome'],sorteado['sobrenome'],sorteio['nome'],sorteado['celular'])
+            api_whats = monta_api_whats(sorteado['username'],sorteio['nome'],str(sorteado['celular']))
 
             return render_template(
                 'admin/sortear_bilhete.html',
@@ -286,14 +254,15 @@ def consultar_vencedor():
             )
 
         vencedor = db.execute(
-            'SELECT * FROM bilhete WHERE id_bilhete = ?',
+                'SELECT usuario.username AS username, usuario.celular AS celular, bilhete.id_sorteio AS id_sorteio, bilhete.id_bilhete AS id_bilhete ' +
+                ' FROM bilhete INNER JOIN usuario ON bilhete.id_usuario = usuario.id_usuario WHERE id_bilhete = ?',
             (sorteio['id_bilhete_sorteado'],)
         ).fetchone()
 
  
 
 
-        api_whats = monta_api_whats(vencedor['nome'],vencedor['sobrenome'],sorteio['nome'],vencedor['celular'])
+        api_whats = monta_api_whats(vencedor['username'],sorteio['nome'],str(vencedor['celular']))
 
         return render_template(
             'admin/consultar_vencedor.html',

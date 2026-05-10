@@ -36,8 +36,7 @@
         </script>
         <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <p><strong>Bilhete Vencedor:</strong></p>
-          <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
-          <p>Nome: {{ sorteado.nome }} {{ sorteado.sobrenome }}</p>
+          <p>Nome: {{ sorteado.username }}</p>
           <p>Celular: {{ sorteado.celular }}</p>
         </div>
         <div>
@@ -52,15 +51,14 @@
           <h2>Validado o vencedor:</h2>
           <div style="background-color: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
             <p><strong>Bilhete Vencedor:</strong></p>
-            <p style="font-size: 18px; color: #17a2b8;">Código: {{ sorteado.codigo }}</p>
-            <p>Nome: {{ sorteado.nome }} {{ sorteado.sobrenome }}</p>
+            <p>Nome: {{ sorteado.username }} </p>
             <p>Celular: {{ sorteado.celular }}</p>
             </br>
             <h2 class="comunicar_ganhador"><a href="{{ api_whats }}"  target ="_blank"><img src="{{ url_for('static', filename='img/Logo-bw-vertical1.svg') }}" class="logo-whats">Comunicar ganhador via WhatsApp</a></h2>
           </div>
 
           <div>
-            <a href="{{ url_for('admin.index') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Voltar para a Área de Administrador</a>
+            <a href="{{ url_for('admin.index_admin') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; width: fit-content;">Voltar para a Área de Administrador</a>
           </div>
         </article>        
       {% endif %}
