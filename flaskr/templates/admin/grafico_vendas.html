@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Gráfico de Vendas{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Gráfico com Histórico de Vendas</h2>
+    <select id="filtroPeriodo">
+      <option value="30">Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="365">Último ano</option>
+    </select>
+    <select id="tipoGrafico">
+      <option value="vendas">Vendas por Dia</option>
+      <option value="cliente">Vendas por Cliente</option>
+      <option value="produto">Vendas por Produto</option>
+    </select>
+    <div id="grafico"></div>
+    <script src="https://cdn.plot.ly/plotly-3.5.1.min.js" charset="utf-8"></script>
+    <script>
+      function carregarGrafico() {
+        var dias = document.getElementById('filtroPeriodo').value
+        var tipo = document.getElementById('tipoGrafico').value
+        fetch(`/api/grafico?dias=${dias}&tipo=${tipo}`)
+          .then(response => response.json())
+          .then(chartData => {
+            Plotly.newPlot('grafico', chartData.data, chartData.layout);
+          });
+      }
+
+      document.getElementById('filtroPeriodo').addEventListener('change', function() {
+        carregarGrafico();
+      })
+      document.getElementById('tipoGrafico').addEventListener('change', function() {
+        carregarGrafico();
+      })
+
+     ;
+      document.getElementById('filtroPeriodo').value = 30;
+      document.getElementById('tipoGrafico').value = 'vendas';
+      carregarGrafico(); // carrega ao abrir a página
+    </script>
+
+    
+{% endblock %}

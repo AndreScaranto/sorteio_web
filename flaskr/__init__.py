@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from . import db, auth, usuario, admin
+from . import db, auth, usuario, admin, api
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -26,5 +26,6 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.register_blueprint(usuario.bp)
     app.register_blueprint(admin.bp)
+    app.register_blueprint(api.bp, url_prefix='/api')
 
     return app

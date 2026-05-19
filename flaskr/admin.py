@@ -326,6 +326,24 @@ def registrar_venda():
                     flash(f'Erro no registro da venda: {e}')                
     return render_template('admin/registrar_venda.html')
 
+import plotly.express as px
+import pandas as pd
+import plotly.utils
+import json
+
+def get_vendas_dataframe():
+    db = get_db()
+    query = "SELECT * FROM venda"
+    df = pd.read_sql_query(query,db)
+    return df
+
+@bp.route('/grafico_vendas', methods=('GET', 'POST'))
+@admin_required
+def grafico_vendas():
+    return render_template('admin/grafico_vendas.html')
+
+
+
 @bp.route('/adicionar_produto', methods=('GET', 'POST'))
 @admin_required
 def adicionar_produto():
