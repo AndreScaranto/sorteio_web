@@ -27,14 +27,10 @@
           });
       }
 
-      document.getElementById('filtroPeriodo').addEventListener('change', function() {
-        carregarGrafico();
-      })
-      document.getElementById('tipoGrafico').addEventListener('change', function() {
-        carregarGrafico();
-      })
+      document.getElementById('filtroPeriodo').addEventListener('change', carregarGrafico())
+      document.getElementById('tipoGrafico').addEventListener('change', carregarGrafico())
+      window.addEventListener('resize', carregarGrafico());
 
-     ;
       document.getElementById('filtroPeriodo').value = 30;
       document.getElementById('tipoGrafico').value = 'vendas';
       carregarGrafico(); // carrega ao abrir a página
