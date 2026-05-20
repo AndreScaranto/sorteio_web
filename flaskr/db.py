@@ -65,7 +65,7 @@ data_final_sorteio = "2026-05-10"
 def carrega_sorteios(db):
     db.execute(
         "INSERT INTO sorteio (nome, data_inicial, data_limite, valor_por_bilhete) VALUES (?, ?, ?, ?)",
-        ("Dia das Mães", data_inicio_sorteio, data_final_sorteio, 50),
+        ("Dia das Mães", data_inicio_sorteio, "2999-01-01", 50),
     )
 
 produtos = {"Rústico Branco" : "20", 
@@ -102,14 +102,14 @@ def carrega_vendas(db):
                 "Pão de Forma Integral",
                 "Focaccia Gorgonzola",
                 "Focaccia Calabresa")
-    while (datetime_final_sorteio - datetime_atual) > timedelta(days=-1):
+    while (datetime.now() - datetime_atual) > timedelta(days=1):
         #print(datetime_atual)
         #print(datetime_atual.weekday())
         dia_semana = datetime_atual.weekday()
         if dia_semana >= 2 and dia_semana <= 5:
             vetor_produtos = np.zeros((quant_users,tamanho_catalogo))
             #print(vetor_produtos)
-            if (datetime_atual - datetime_inicio_sorteio) > timedelta(days=-1):
+            if (datetime_atual - datetime_inicio_sorteio) > timedelta(days=-1) and (datetime_final_sorteio - datetime_atual) > timedelta(days=-1):
                 fator_sorteio = 3
             else:
                 fator_sorteio = 1
