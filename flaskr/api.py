@@ -40,7 +40,8 @@ def get_clientes_dataframe(dias):
         INNER JOIN usuario ON venda.id_usuario = usuario.id_usuario
         WHERE venda.data_venda >= date('now', :filtro)
         GROUP BY usuario.username 
-        ORDER BY receita ASC
+        ORDER BY receita DESC
+        LIMIT 10
     """
     df = pd.read_sql_query(query, db, params={'filtro': f'-{dias} days'})
     return df
@@ -56,6 +57,7 @@ def get_produtos_dataframe(dias):
         WHERE venda.data_venda >= date('now', :filtro)
         GROUP BY produto.nome 
         ORDER BY receita DESC
+        LIMIT 10
     """
     df = pd.read_sql_query(query, db, params={'filtro': f'-{dias} days'})
     return df
