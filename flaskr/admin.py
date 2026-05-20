@@ -308,7 +308,7 @@ def registrar_venda():
                     flash(f'Não foi encontrado usuário com o celular {celular}.')
             else:
                 id_usuario = request.form.get('id_usuario')
-                data_venda = datetime.now()
+                data_venda = datetime.now().replace(microsecond=0)
                 preco = request.form.get('preco')
                 preco_atual = request.form.get('preco_atual')
                 desconto_unitario = float(preco) - float(preco_atual)
