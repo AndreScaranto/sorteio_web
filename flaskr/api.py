@@ -78,10 +78,10 @@ def empacotar_json(fig):
 
 def grafico_vendas(dias):
     df = get_vendas_dataframe(dias)
-    df['data_venda'] = pd.to_datetime(df['data_venda'])
+    #df['semana'] = df.apply(lambda s: s['data_venda'].week, axis=1)
+    df['data_venda'] = pd.to_datetime(df['data_venda']).dt.date
     #filtro_dias = df['data_venda'] > datetime.today()- timedelta(days=dias)
     #df = df[filtro_dias]
-    df['semana'] = df.apply(lambda s: s['data_venda'].week, axis=1)
     df.rename(columns={'receita':'Receita','data_venda':'Data','nome':'Produto','username':'Cliente'},inplace=True)
     fig = px.bar(df, x='Data', y='Receita',hover_data = ['Receita','Data','Produto','Cliente'],color='Produto')
     fig.update_layout(
@@ -96,13 +96,14 @@ def grafico_clientes(dias):
     df = get_clientes_dataframe(dias)
     #df['receita'] = df['preco_venda'] * df['quantidade_vendida']
     df.rename(columns={'receita':'Receita','username':'Cliente'},inplace=True)
-    fig = px.bar(df,x='Receita', y='Cliente', orientation='h')
+    fig = px.bar(df,x='Receita', y='Cliente', orientation='h', color='Cliente')
     fig.update_layout(
         title="Vendas por Cliente",
         xaxis_title="Receita",
         xaxis_tickprefix="R$ ",
         xaxis_tickformat = ',.2f',
-        yaxis_title="Cliente"
+        yaxis_title="Cliente",
+        yaxis={'categoryorder':'total ascending'}
     )
     #fig.show()
     return empacotar_json(fig)
