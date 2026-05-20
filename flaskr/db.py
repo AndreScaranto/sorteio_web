@@ -95,7 +95,7 @@ def carrega_vendas(db):
     datetime_inicio_sorteio = datetime.fromisoformat(data_inicio_sorteio)
     datetime_final_sorteio = datetime.fromisoformat(data_final_sorteio)
     datetime_atual = datetime_inicio
-    random.seed("caso 1")
+    random.seed("caso 5")
     tamanho_catalogo = len(produtos)
     quant_users = len(users)
     nomes_produtos = ("Rústico Branco",
@@ -110,7 +110,7 @@ def carrega_vendas(db):
             vetor_produtos = np.zeros((quant_users,tamanho_catalogo))
             #print(vetor_produtos)
             if (datetime_atual - datetime_inicio_sorteio) > timedelta(days=-1):
-                fator_sorteio = 1.2
+                fator_sorteio = 3
             else:
                 fator_sorteio = 1
             medias = medias_venda_dia_semana[dia_semana]
