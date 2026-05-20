@@ -6,11 +6,11 @@
   <h2 style="margin-bottom: 20px;">Gráficos de Vendas</h2>
     <select id="filtroPeriodo">
       <option value="30">Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
+      <option value="90" selected="selected">Últimos 90 dias</option>
       <option value="365">Último ano</option>
     </select>
     <select id="tipoGrafico">
-      <option value="vendas">Vendas por Dia</option>
+      <option value="vendas" selected="selected">Vendas por Dia</option>
       <option value="cliente">Vendas por Cliente</option>
       <option value="produto">Vendas por Produto</option>
     </select>
@@ -38,7 +38,7 @@
       });
 
      ;
-      document.getElementById('filtroPeriodo').value = 30;
+      document.getElementById('filtroPeriodo').value = 90;
       document.getElementById('tipoGrafico').value = 'vendas';
       carregarGrafico(); // carrega ao abrir a página
     </script>
