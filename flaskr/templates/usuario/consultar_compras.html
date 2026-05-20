@@ -7,7 +7,7 @@
 
     <div>
         {% if compra_encontrada %}
-        <table style="margin: 10px;">
+        <table>
             <tr>
                 <th>N° Registro </th>
                 <th>Produto </th>
@@ -31,6 +31,6 @@
         {% else %}
         <p style="margin: 10px;">Você ainda não fez nenhuma compra</p>
         {% endif %}
-        <a href="{{ url_for('usuario.index_usuario') }}" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px; border-radius: 5px; margin: 10px;">Voltar para a área de usuário</a>
+        <a href="{{ url_for('usuario.index_usuario') }}" class="return-button">Voltar para a área de usuário</a>
     </div>
 {% endblock %}

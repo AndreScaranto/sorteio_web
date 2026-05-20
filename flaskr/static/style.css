@@ -132,18 +132,57 @@ a {
     border-radius: 5px;
 }
 
-/* Área de Usuario */
+.return-button {
+    text-decoration: none;
+    background-color: #593737;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
 
+.depositar-button {
+    padding: 4px;
+    background-color: #593737;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.depositar-button:hover {
+    background-color: #ac7b6c;
+    color: rgb(0, 0, 0);
+}
+
+.depositar-button:disabled {
+    background-color: gray
+}
+
+/* Área de Usuario */
+table {
+    border: 1px solid black;
+    margin: 10px auto;
+    margin-bottom: 20px;
+    width: 90%;
+    background-color: white;
+    color: #3B3030;
+    border-collapse: collapse;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 td {
     border: 1px solid black;
     margin: 0px;
-    padding: 5px;
+    padding: 5px 10px;
+    background-color: white;
+    text-align: center;
 }
 
 th {
     border: 1px solid black;
     margin: 0px;
-    padding: 5px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    text-align: center;
 }
 
 /* Área de ADM */
@@ -229,6 +268,14 @@ input.danger {
 
 input[type=submit] { 
     align-self: start; min-width: 10em; 
+}
+
+select {
+    padding: 4px;
+    background-color: #593737;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
 .opcao_lista {
