@@ -181,7 +181,8 @@ def consultar_compras():
         ' produto.nome AS produto ' +
         ' FROM venda ' +
         ' INNER JOIN produto ON venda.id_produto = produto.id_produto '+
-         ' WHERE id_usuario = ?', (id_usuario,)
+         ' WHERE id_usuario = ? ' + 
+         ' ORDER BY data_venda DESC', (id_usuario,)
     ).fetchall()
     if compras:
         return render_template('usuario/consultar_compras.html',compra_encontrada=True,compras=compras)
