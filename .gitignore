@@ -1,5 +1,5 @@
 # Ignora arquivos de cache do Python
-#__pycache__/
+__pycache__/
 *.py[cod]
 
 # Ignora arquivos temporários do sistema
@@ -20,3 +20,6 @@ Thumbs.db
 #venv/
 #.venv/
 ambiente/
+
+# ignora as alterações na base de dados para evitar sobrescrever os dados da base viva
+instance/
