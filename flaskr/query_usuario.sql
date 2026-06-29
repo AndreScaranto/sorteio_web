@@ -1,9 +1,14 @@
-WITH vendas_sorteio AS (
-    SELECT sorteio.nome AS nome_sorteio, sorteio.id_sorteio AS id_sorteio, venda.id_usuario AS id_usuario, SUM(preco_venda * quantidade_vendida) AS [total_comprado]
+WITH vendas_usuario AS (
+	SELECT id_venda, data_venda, usuario.id_usuario, id_produto, preco_venda, desconto_unitario, quantidade_vendida FROM usuario
+	LEFT JOIN venda
+	ON usuario.id_usuario = venda.id_usuario
+),
+vendas_sorteio AS (
+    SELECT sorteio.nome AS nome_sorteio, sorteio.id_sorteio AS id_sorteio, vendas_usuario.id_usuario AS id_usuario, SUM(preco_venda * quantidade_vendida) AS [total_comprado]
     FROM sorteio 
-    CROSS JOIN venda 
-    WHERE data_limite > "2026-05-01" AND data_inicial < "2026-05-01"
-    AND data_venda > data_inicial AND data_venda < data_limite
+    LEFT JOIN vendas_usuario 
+    WHERE data_limite > date("now") AND data_inicial < date("now")
+    AND ((data_venda > data_inicial AND data_venda < data_limite) OR data_venda IS NULL)
 	AND id_usuario = ?
     GROUP BY nome_sorteio
 ),
