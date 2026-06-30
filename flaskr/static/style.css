@@ -185,6 +185,18 @@ th {
     text-align: center;
 }
 
+.form-usuario {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    max-width: 500px;
+}
+
+.form-usuario input {
+    padding: 8px; 
+    border-radius: 5px; 
+    border: 1px solid #ccc;
+ }
 /* Área de ADM */
 
 /* MAIN */
