@@ -327,7 +327,7 @@ select {
 
   /* --- Base typography --- */
   body {
-    font-size: 20px; /* bumps all relative units up */
+    font-size: 16px; /* bumps all relative units up */
   }
 
   /* --- Navbar --- */
