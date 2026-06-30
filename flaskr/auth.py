@@ -250,7 +250,7 @@ def cadastrar_usuario():
     if request.method == "POST":
         username = request.form.get("usuario", "").strip()
         password = request.form.get("senha", "")
-        cpf = request.form.get("cpf", "")
+        #cpf = request.form.get("cpf", "")
         celular = request.form.get("celular", "")
         db = get_db()
         error = None
@@ -259,23 +259,23 @@ def cadastrar_usuario():
             error = "Preencha seu nome de usuário."
         elif not password:
             error = "Preencha sua senha."
-        elif not cpf:
-            error = "Preencha o CPF."
+        #elif not cpf:
+        #    error = "Preencha o CPF."
         elif not celular:
             error = "Preencha o celular."
 
         if error is None:
 
             dup = db.execute(
-                "SELECT 1 FROM usuario WHERE cpf = ?",
-                (cpf,)
+                "SELECT 1 FROM usuario WHERE celular = ?",
+                (celular,)
             ).fetchone()
             if dup:
-                error = f"Já há um usuário cadastrado com o CPF {cpf}."
+                error = f"Já há um usuário cadastrado com o celular {celular}."
             else:
                 db.execute(
                     "INSERT INTO usuario (username, password, cpf,celular) VALUES (?, ?, ?, ?)",
-                    (username, generate_password_hash(password), cpf, celular)
+                    (username, generate_password_hash(password), "0", celular)
                 )
                 db.commit()
                 user = db.execute(
