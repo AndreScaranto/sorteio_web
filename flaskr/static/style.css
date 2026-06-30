@@ -111,10 +111,32 @@ a {
 .formulario {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     max-width: 400px;
 }
 
+.celular-field {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.ddd-field {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 70px; /* fixed-ish width, just enough for "DDD" + 2 digits */
+}
+
+.numero-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* takes up the remaining space */
+}
+
+.ddd-field input,
+.numero-field input {
+    width: 100%;
+}
 
 .green-button {
     padding: 10px;

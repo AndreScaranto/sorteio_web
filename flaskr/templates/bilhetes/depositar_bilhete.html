@@ -6,10 +6,127 @@
   <h2 style="margin-bottom: 20px;">Deposite seu bilhete abaixo</h2>
 
   <form class="formulario" method="post">
-    <input class="inserir" name="codigo" placeholder="Código" required>
-    <input class="inserir" name="nome" placeholder="Nome" required>
-    <input class="inserir" name="sobrenome" placeholder="Sobrenome" required>
-    <input class="inserir" name="celular" placeholder="Celular" required>
+    <label for="codigo">Código: </label>
+    <input class="inserir" id ="codigo" name="codigo" placeholder="Código" required>
+    <label for="nome">Nome: </label>
+    <input class="inserir" id="nome" name="nome" placeholder="Nome" required>
+    <label for="sobrenome">Sobrenome: </label>
+    <input class="inserir" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required>
+    <div class="celular-field">
+      <div class="ddd-field">
+        <label for="ddd">DDD: </label>
+        <input
+          type="text"
+          id="ddd"
+          name="ddd"
+          class="inserir"
+          inputmode="numeric"
+          pattern="[0-9]{2}"
+          maxlength="2"
+          placeholder="99"
+          required
+        >
+      </div>
+
+      <div class="numero-field">
+        <label for="numero">Número: </label>
+        <input
+          type="text"
+          id="numero"
+          name="numero"
+          class="inserir"
+          inputmode="numeric"
+          pattern="[0-9]{8,9}"
+          maxlength="9"
+          placeholder="987654321"
+          required
+        >
+      </div>
+    </div>
+
+    <input type="hidden" id="celular" name="celular">
     <button class="blue-button" type="submit">Depositar</button>
   </form>
+  <script>
+    const nomeInput = document.getElementById('nome');
+    const sobrenomeInput = document.getElementById('sobrenome');
+    const dddInput = document.getElementById('ddd');
+    const numeroInput = document.getElementById('numero');
+    const celularHidden = document.getElementById('celular');
+
+    // No carregamento, verificar se temos valores salvos
+    window.addEventListener('DOMContentLoaded', () => {
+      const nomeSalvo = localStorage.getItem('ultimoNome');
+      const sobrenomeSalvo = localStorage.getItem('ultimoSobrenome');
+      const dddSalvo = localStorage.getItem('ultimoDdd');
+      const numeroSalvo = localStorage.getItem('ultimoNumero');
+
+      if (nomeSalvo) nomeInput.value = nomeSalvo;
+      if (sobrenomeSalvo) sobrenomeInput.value = sobrenomeSalvo;
+      if (dddSalvo) dddInput.value = dddSalvo;
+      if (numeroSalvo) numeroInput.value = numeroSalvo;
+    });
+
+    // Salvar os valores quando mudam
+
+    nomeInput.addEventListener('input', () => {
+      localStorage.setItem('ultimoNome', nomeInput.value);
+    });
+
+    sobrenomeInput.addEventListener('input', () => {
+      localStorage.setItem('ultimoSobrenome', sobrenomeInput.value);
+    });
+
+    dddInput.addEventListener('input', () => {
+      localStorage.setItem('ultimoDdd', dddInput.value);
+    });
+
+    numeroInput.addEventListener('input', () => {
+      localStorage.setItem('ultimoNumero', numeroInput.value);
+    });
+
+    // Só permitir dígitos nos campos de celular
+    function somenteDigitos(e) {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    }
+
+    dddInput.addEventListener('input', somenteDigitos);
+    numeroInput.addEventListener('input', somenteDigitos);
+
+    // Avançar automaticamente com o DDD preenchido
+    dddInput.addEventListener('input', () => {
+      if (dddInput.value.length === 2) {
+        numeroInput.focus();
+      }
+    });
+
+    // validar antes de submit
+    function validarCelular() {
+      console.log("rodou essa função")
+      const ddd = dddInput.value.trim();
+      const numero = numeroInput.value.trim();
+
+      if (ddd.length !== 2) {
+        alert('DDD deve ter 2 dígitos.');
+        dddInput.focus();
+        return false;
+      }
+
+      if (numero.length < 8 || numero.length > 9) {
+        alert('Número deve ter 8 ou 9 dígitos.');
+        numeroInput.focus();
+        return false;
+      }
+
+      // Combine into a single value, e.g. for sending to backend
+      celularHidden.value = `(${ddd}) ${numero}`;
+      return true;
+    }
+    document.querySelector('.formulario').addEventListener('submit', (e) => {
+      if (!validarCelular()) {
+        e.preventDefault();
+      }
+    });
+
+  </script>
 {% endblock %}
