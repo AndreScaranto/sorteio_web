@@ -6,10 +6,80 @@
   <h2 style="margin-bottom: 20px;">Consultar meus bilhetes</h2>
 
   <form class="formulario" method="post">
-    <input class="inserir" name="celular" placeholder="Digite seu celular">
-    <input class="inserir"  name="codigo" placeholder="Digite o código do bilhete">
+    <div class="celular-field">
+      <div class="ddd-field">
+        <label for="ddd">DDD: </label>
+        <input
+          type="text"
+          id="ddd"
+          name="ddd"
+          class="inserir"
+          inputmode="numeric"
+          pattern="[0-9]{2}"
+          maxlength="2"
+          placeholder="99"
+          required
+        >
+      </div>
+
+      <div class="numero-field">
+        <label for="numero">Número: </label>
+        <input
+          type="text"
+          id="numero"
+          name="numero"
+          class="inserir"
+          inputmode="numeric"
+          pattern="[0-9]{8,9}"
+          maxlength="9"
+          placeholder="987654321"
+          required
+        >
+      </div>
+    </div>
+
+    <input type="hidden" id="celular" name="celular">
     <button class="green-button" type="submit">Buscar</button>
   </form>
+  <script>
+    const dddInput = document.getElementById('ddd');
+    const numeroInput = document.getElementById('numero');
+    const celularHidden = document.getElementById('celular')
+    // Só permitir dígitos nos campos de celular
+    function somenteDigitos(e) {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    }
+
+    dddInput.addEventListener('input', somenteDigitos);
+    numeroInput.addEventListener('input', somenteDigitos);
+
+    // validar antes de submit
+    function validarPesquisa() {
+      const ddd = dddInput.value.trim();
+      const numero = numeroInput.value.trim();
+      if (ddd.length !== 2) {
+        alert('DDD deve ter 2 dígitos.');
+        dddInput.focus();
+        return false;
+      }
+
+      if (numero.length < 8 || numero.length > 9) {
+        alert('Número deve ter 8 ou 9 dígitos.');
+        numeroInput.focus();
+        return false;
+      }
+
+      // combinar os valores para mandar para o backend
+      celularHidden.value = `(${ddd}) ${numero}`;
+      return true;
+    }
+
+    document.querySelector('.formulario').addEventListener('submit', (e) => {
+      if (!validarPesquisa()) {
+        e.preventDefault();
+      }
+    });
+  </script>
 
   {% if bilhetes %}
     <div style="margin-top: 30px;">
