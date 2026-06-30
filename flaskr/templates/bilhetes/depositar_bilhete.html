@@ -128,5 +128,16 @@
       }
     });
 
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const codigo = params.get('codigo');
+
+      if (codigo) {
+        const input = document.getElementById('codigo');
+        input.value = codigo;
+        input.readOnly = true;
+      }
+    });
+
   </script>
 {% endblock %}

@@ -115,6 +115,13 @@ a {
     max-width: 400px;
 }
 
+#codigo[readonly] {
+  background-color: #e9e9e9;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
 .celular-field {
     display: flex;
     gap: 12px;
