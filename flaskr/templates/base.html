@@ -2,6 +2,7 @@
 <html lang="pt-br">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Sorteios WEB{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
@@ -12,7 +13,16 @@
     </header>
     <nav class="navbar">
       <h1>Bem vindo!</h1>
-      <ul>
+
+
+      <!-- Botão para o menu colapsável -->
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul id="nav-menu">
         {% if g.user %}
             <li><span>{{ g.user['username'] }}</span></li>
             <li><a class="navbar-item" href="{{ url_for('auth.logout') }}">Sair</a></li>
@@ -38,5 +48,22 @@
       {% block content %}{% endblock %}
       </section>
     </main>
+  <script>
+  const hamburger = document.getElementById('hamburger');
+  const navMenu   = document.getElementById('nav-menu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMenu.classList.toggle('open');
+  });
+
+  // Close menu when a link is tapped
+  navMenu.querySelectorAll('.navbar-item').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMenu.classList.remove('open');
+    });
+  });
+  </script>
   </body>
 </html>
