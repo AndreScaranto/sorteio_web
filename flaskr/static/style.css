@@ -161,7 +161,32 @@ a {
     border-radius: 5px;
 }
 
+/* Área de Usuario */
+table {
+    border: 1px solid black;
+    margin: 10px auto;
+    margin-bottom: 20px;
+    width: 90%;
+    background-color: white;
+    color: #3B3030;
+    border-collapse: collapse;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+td {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 5px 10px;
+    background-color: white;
+    text-align: center;
+}
 
+th {
+    border: 1px solid black;
+    margin: 0px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    text-align: center;
+}
 
 /* Área de ADM */
 
