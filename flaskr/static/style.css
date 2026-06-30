@@ -161,6 +161,15 @@ a {
     border-radius: 5px;
 }
 
+.return-button {
+    text-decoration: none;
+    background-color: #593737;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
 /* Área de Usuario */
 table {
     border: 1px solid black;

@@ -38,7 +38,8 @@
       </div>
     </article>
   {% else %}
-      <p>Não foi encontrado nenhum bilhete com os valores pesquisados</p>
-      <a href="{{ url_for('bilhetes.consultar_bilhetes') }}">Nova pesquisa</a>
+      <p>Não foi encontrado nenhum bilhete com os valores pesquisados</p><br>
   {% endif %}
+      <a class="return-button" href="{{ url_for('bilhetes.consultar_bilhetes') }}">Nova pesquisa</a>
+
 {% endblock %}
