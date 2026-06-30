@@ -314,5 +314,122 @@ select {
     justify-content: space-between;
 }
 
+/* On desktop, make sure the hamburger is never visible */
+.hamburger {
+  display: none;
+}
+
+/* ============================================
+   RESPONSIVE / MOBILE  (max-width: 768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+
+  /* --- Base typography --- */
+  body {
+    font-size: 20px; /* bumps all relative units up */
+  }
+
+  /* --- Navbar --- */
+  .navbar {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    position: relative;
+  }
+
+  .navbar h1 {
+    margin-left: 0;
+    font-size: 1.8rem;
+  }
+
+  /* Hide the regular menu and show it only when .open is active */
+  .navbar ul {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin-right: 0;
+    margin-top: 0.5rem;
+    background-color: #593737;
+    padding-bottom: 0.75rem;
+  }
+
+  .navbar ul.open {
+    display: flex;
+  }
+
+  .navbar li {
+    width: 100%;
+    border-top: 1px solid #7a4f4f;
+  }
+
+  .navbar-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    line-height: normal;
+  }
+
+  /* --- Hamburger button --- */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #FFF0D1;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+
+  /* Animate into an X when open */
+  .hamburger.open span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+
+  /* --- Forms --- */
+  .formulario {
+    max-width: 100%;
+  }
+
+  .inserir {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .blue-button,
+  .green-button,
+  .return-button,
+  .depositar-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px;
+    text-align: center;
+  }
+
+  /* --- Main content --- */
+  main {
+    padding: 12px;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}
+
 
 
