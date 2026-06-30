@@ -40,26 +40,31 @@ def index():
 @login_required
 def gerar_codigo():
     db = get_db()
-
     if request.method == 'POST':
         if 'sorteio_id' in request.form:
+            contagem = int(request.form.get('contagem'))
+            codigos = []
             possibilidades = string.ascii_uppercase + string.digits
-            codigo = ""
-            for i in range(7):
-                for j in range(5):
-                    codigo += random.choice(possibilidades)
-                if i < 6:
-                    codigo += "-"
-            db = get_db()
-            db.execute(
-                'INSERT INTO codigo (codigo, id_sorteio) VALUES (?, ?)',
-                (codigo, request.form['sorteio_id'])
-            )
+            while contagem > 0:
+                codigo = ""
+                for i in range(7):
+                    for j in range(5):
+                        codigo += random.choice(possibilidades)
+                    if i < 6:
+                        codigo += "-"
+                db = get_db()
+                db.execute(
+                    'INSERT INTO codigo (codigo, id_sorteio) VALUES (?, ?)',
+                    (codigo, request.form['sorteio_id'])
+                )
+                codigos.append(codigo)
+                contagem = contagem - 1
             db.commit()
             return render_template(
                 'admin/gerar_codigo.html',
                 sorteio_escolhido=True,
-                codigo=codigo
+                codigos=codigos,
+                contagem=int(request.form.get('contagem'))
             )
 
     sorteios = db.execute(

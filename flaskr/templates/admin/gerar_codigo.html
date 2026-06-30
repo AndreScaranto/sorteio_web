@@ -7,21 +7,32 @@
 
   {% if sorteio_escolhido %}
     <div style="margin-bottom: 20px;">
-      <p><strong>Código gerado:</strong></p>
+      <p><strong>Código{% if contagem > 1 %}s{% endif %} gerado{% if contagem > 1 %}s{% endif %}:</strong></p>
+      {% for codigo in codigos %}
       <div style="background-color: #f1f1f1; padding: 15px; border-radius: 5px; font-size: 20px; color: #333; word-break: break-word;">
-        <span id="codigo-texto">{{ codigo }}</span>
+        <span class="codigo-texto">{{ codigo }}</span>
       </div>
+      {% endfor %}
       <button class="green-button" onclick="copiarLinkComCodigo()" style="margin-top: 10px;">
-        Copiar Link com Código
+        Copiar Link com Código(s)
       </button>
     </div>
 
     <script>
       function copiarLinkComCodigo() {
-        const codigo = document.getElementById('codigo-texto').innerText;
-        const url = `${window.location.origin}/depositar_bilhete?codigo=${encodeURIComponent(codigo)}`;
-        navigator.clipboard.writeText(url).then(function() {
-          alert('Código copiado com sucesso!');
+        const codigos = document.querySelectorAll('.codigo-texto');
+        var url;
+        const pre_texto = 'Com o seu pedido voce ganha cupons para participar do nosso Sorteio de Aniversário🥳 valendo uma cesta com nossos produtos🎁!\n';
+        var texto = pre_texto;
+        i = 1
+        function montaCodigo(codigo,index,arr){
+          url = `${window.location.origin}/depositar_bilhete?codigo=${encodeURIComponent(codigo.innerText)}`;
+          texto = texto + 'CUPOM ' + String(index+1) + ': ' + url + '\n\n';
+        }
+        codigos.forEach(montaCodigo) 
+
+        navigator.clipboard.writeText(texto).then(function() {
+          alert('Código(s) copiado(s) com sucesso!');
         }, function(err) {
           alert('Erro ao copiar código!');
         });
@@ -31,11 +42,13 @@
   {% else %}
     <form method="post" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px;">
       <label for="sorteio_id">Selecione um sorteio:</label>
-      <select name="sorteio_id" id="sorteio_id" required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+      <select name="sorteio_id" id="sorteio_id" class="inserir" required>
         {% for sorteio in sorteios %}
           <option value="{{ sorteio.id_sorteio }}">{{ sorteio.nome }}</option>
         {% endfor %}
       </select>
+      <label for="contagem">Selecione a quantidade de códigos para gerar:</label>
+      <input type="number" class="inserir" id="contagem" name="contagem" min="1">
       <button class="blue-button" type="submit">
         Gerar Código
       </button>
